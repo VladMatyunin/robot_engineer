@@ -1,11 +1,12 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 #include <QObject>
-
+#include <myudpclient.h>
 class Counter : public QObject{
     Q_OBJECT
 private: int m_nValue;
-private : bool isLight;
+ bool isLight;
+UDPClient* client;
 public: Counter();
 public slots:
     void slotInc();

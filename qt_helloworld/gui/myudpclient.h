@@ -7,10 +7,10 @@ class UDPClient : public QObject{
 
 private:
     QUdpSocket *m_pudp;
-public slots:
-       void processData(bool);
+
+
 public:
     UDPClient();
-
+       void processData(bool);
 };
 #endif // UDPCLIENT_H

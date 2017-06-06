@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <QCheckBox>
+#include <myudpserver.h>
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -13,6 +14,9 @@ int main(int argc, char *argv[])
     QPushButton cmd("ADD");
     Counter counter;
     QWidget mainWindow;
+    QWidget serverWindow;
+    MyUdpServer server;
+    server.show();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *lowLayout = new QHBoxLayout;
@@ -27,6 +31,7 @@ int main(int argc, char *argv[])
     //    mainLayout->addStretch(0.2);
         mainLayout->addWidget(&cmd);
         lowLayout->setMargin(50);
+
     mainLayout->addLayout(lowLayout);
 
 
@@ -38,6 +43,5 @@ int main(int argc, char *argv[])
     QObject::connect(&cmd,SIGNAL(clicked()),&counter, SLOT(slotInc()));
     QObject::connect(&counter,SIGNAL(counterChanged(int)),&lbl,SLOT(setNum(int)));
     QObject::connect(&counter,SIGNAL(goodbye()),&app,SLOT(quit()));
-
     return app.exec();
 }
