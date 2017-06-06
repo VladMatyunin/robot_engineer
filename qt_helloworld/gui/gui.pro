@@ -4,19 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = gui
+TARGET = gui network
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    counter.cpp
+    counter.cpp \
+    myudpclient.cpp
 
 HEADERS  += mainwindow.h \
-    counter.h
+    counter.h \
+    myudpclient.h
 
 FORMS    += mainwindow.ui
