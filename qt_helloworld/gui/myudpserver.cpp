@@ -13,9 +13,11 @@ MyUdpServer::MyUdpServer(QWidget *pwgt): QTextEdit(pwgt)
 {
     setWindowTitle("UDP_Server");
     m_pudp = new QUdpSocket(this);
+    m_pudp->bind(2425);
     QTimer* ptimer = new QTimer(this);
     ptimer->start();
     show();
+    connect(m_pudp,SIGNAL(readyRead()),SLOT(slotSendDatagram()));
     //connect(ptimer, SIGNAL(timeout()), SLOT(slotSendDatagram()));
 }
 void MyUdpServer::slotSendDatagram(){
@@ -25,8 +27,8 @@ void MyUdpServer::slotSendDatagram(){
         m_pudp->readDatagram(baDatagram.data(),baDatagram.size());
 
     }while(m_pudp->hasPendingDatagrams());
-    QDateTime dateTime;
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
-    in >> dateTime;
-    append("Received:"+dateTime.toString());
+    char* isLight;
+    in >> isLight;
+    append(isLight);
 }

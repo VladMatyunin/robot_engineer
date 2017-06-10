@@ -16,11 +16,19 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     counter.cpp \
     myudpclient.cpp \
-    myudpserver.cpp
+    myudpserver.cpp \
+    robotcontroller.cpp \
+    jointcontrolform.cpp \
+    platformcontrolform.cpp \
+    informationwindow.cpp
 
 HEADERS  += mainwindow.h \
     counter.h \
     myudpclient.h \
-    myudpserver.h
+    myudpserver.h \
+    robotcontroller.h \
+    jointcontrolform.h \
+    platformcontrolform.h \
+    informationwindow.h
 
 FORMS    += mainwindow.ui
