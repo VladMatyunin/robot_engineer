@@ -18,7 +18,7 @@ private:
 
 public:
     UDPClient();
-
+    void putData(QDataStream &out, const RemoteControlPacket &packet);
     void processData(bool);
     ~UDPClient();
 

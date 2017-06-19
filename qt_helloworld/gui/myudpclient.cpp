@@ -17,14 +17,16 @@ UDPClient::UDPClient():QObject()
     controller = new RobotController;
     m_pudp->bind(2424);
     connect(&timer, SIGNAL(timeout()), this, SLOT(sendLivePackets()));
-    timer.start(1000);
+    timer.start(5000);
 }
 void UDPClient::processData(bool isLight){
     QByteArray baDatagram;
     QDataStream out(&baDatagram,QIODevice::ReadWrite);
     out.setVersion(QDataStream::Qt_5_2);
-    QByteArray array = controller->turnLight();
-    out<<array.data();
+    RemoteControlPacket *packet = controller->turnLight();
+
+    qDebug()<<sizeof(*packet);
+    putData(out,*packet);
     m_pudp->writeDatagram(baDatagram,QHostAddress::LocalHost,2425);
 }
 UDPClient::~UDPClient(){
@@ -35,11 +37,18 @@ UDPClient::~UDPClient(){
 
 void UDPClient::sendLivePackets(){
         QByteArray baDatagram;
+
         QDataStream out(&baDatagram,QIODevice::ReadWrite);
         out.setVersion(QDataStream::Qt_5_2);
-//        QByteArray array = controller->getBasicPacket();
-        out<<controller->getBasicPacket();
-//        qDebug()<<array.data();
+        RemoteControlPacket *packet = controller->getBasicPacket();
+        putData(out,*packet);
         m_pudp->writeDatagram(baDatagram,QHostAddress::LocalHost,2425);
 
 }
+void UDPClient::putData(QDataStream &out, const RemoteControlPacket &packet){
+    out.writeRawData((char*)&packet,57);
+
+//    out.writeRawData((char*)packet.AXIS, 16*sizeof(char));
+//    out.writeRawData((char*)packet.BUTTON,16*sizeof(char));
+//    out << packet.TELEMETRY;
+    }

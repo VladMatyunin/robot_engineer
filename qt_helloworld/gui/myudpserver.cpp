@@ -7,7 +7,7 @@
 #include "QDataStream"
 #include "QByteArray"
 #include "QDataStream"
-
+#include "myudpclient.h"
 
 MyUdpServer::MyUdpServer(QWidget *pwgt): QTextEdit(pwgt)
 {
@@ -19,16 +19,17 @@ MyUdpServer::MyUdpServer(QWidget *pwgt): QTextEdit(pwgt)
 }
 void MyUdpServer::slotSendDatagram(){
     QByteArray baDatagram;
+    RobotController controller;
     do {
         baDatagram.resize(m_pudp->pendingDatagramSize());
         m_pudp->readDatagram(baDatagram.data(),baDatagram.size());
 
     }while(m_pudp->hasPendingDatagrams());
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
-    char* isLight;
-    in >> isLight;
-    //qDebug()<<isLight;
-    append(isLight);
+    RemoteControlPacket *packet = controller.getBasicPacket();
+    uint len = 57;
+    in.readRawData(((char*)(packet)), len);
+    append(((char*) packet));
 }
 MyUdpServer::~MyUdpServer(){
     m_pudp->close();
