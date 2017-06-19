@@ -37,8 +37,9 @@ void UDPClient::sendLivePackets(){
         QByteArray baDatagram;
         QDataStream out(&baDatagram,QIODevice::ReadWrite);
         out.setVersion(QDataStream::Qt_5_2);
-        QByteArray array = controller->getBasicPacket();
-        out<<array.data();
+//        QByteArray array = controller->getBasicPacket();
+        out<<controller->getBasicPacket();
+//        qDebug()<<array.data();
         m_pudp->writeDatagram(baDatagram,QHostAddress::LocalHost,2425);
 
 }

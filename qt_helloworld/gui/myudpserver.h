@@ -9,6 +9,7 @@ private:
     QUdpSocket* m_pudp;
 public:
     MyUdpServer(QWidget *pwgt=0);
+    ~MyUdpServer();
 
 private slots:
 void slotSendDatagram();

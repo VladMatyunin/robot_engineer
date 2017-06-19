@@ -2,13 +2,14 @@
 #define ROBOTCONTROLLER_H
 #include <QByteArray>
 #include <QObject>
+struct RemoteControlPacket;
 class RobotController : public QObject
 {
     Q_OBJECT
 public:
     RobotController();
     QByteArray turnLight();
-    QByteArray getBasicPacket();
+    RemoteControlPacket getBasicPacket();
     
 };
 

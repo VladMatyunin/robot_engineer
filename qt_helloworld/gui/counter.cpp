@@ -11,7 +11,5 @@ void Counter::slotInc(){
 
 }
 void Counter::changeLight(){
-    isLight=!isLight;
-    qDebug()<<isLight;
-    client->processData(isLight);
+
 }

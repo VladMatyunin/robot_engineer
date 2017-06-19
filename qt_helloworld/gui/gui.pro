@@ -14,21 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    counter.cpp \
     myudpclient.cpp \
     myudpserver.cpp \
-    robotcontroller.cpp \
-    jointcontrolform.cpp \
-    platformcontrolform.cpp \
-    informationwindow.cpp
+    robotcontroller.cpp
 
 HEADERS  += mainwindow.h \
-    counter.h \
     myudpclient.h \
     myudpserver.h \
-    robotcontroller.h \
-    jointcontrolform.h \
-    platformcontrolform.h \
-    informationwindow.h
+    robotcontroller.h
 
 FORMS    += mainwindow.ui
