@@ -21,4 +21,5 @@ RemoteControlPacket* RobotController::getBasicPacket(){
     packet->AXIS[16] = {0};
     packet->BUTTON[16] = {0};
     packet->TELEMETRY = 0.0;
-    return packet;}
+    return packet;
+}
