@@ -20,7 +20,9 @@ private:
     QThread *thread;
     QTimer timer;
     QHostAddress *robotAddress;
-    void writeInputToFile(QDataStream *stream);
+    void writeInputToFile(char *data);
+    void sendPacket(RemoteControlPacket packet);
+
 
 
 public:
@@ -28,7 +30,11 @@ public:
     void putData(QDataStream &out, const RemoteControlPacket &packet);
     void processData(bool);
     ~UDPClient();
-
+    void connectToRobot();
+    void moveForward();
+    void moveBack();
+    void moveLeft();
+    void moveRight();
 
 };
 #endif // UDPCLIENT_H

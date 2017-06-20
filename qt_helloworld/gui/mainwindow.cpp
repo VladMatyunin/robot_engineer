@@ -23,3 +23,30 @@ void MainWindow::on_checkBox_toggled(bool checked)
     qDebug()<<isLight;
     client->processData(isLight);
 }
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    client->connectToRobot();
+}
+
+
+
+void MainWindow::on_moveForward_pressed()
+{
+    client->moveForward();
+}
+
+void MainWindow::on_moveLeft_pressed()
+{
+    client->moveLeft();
+}
+
+void MainWindow::on_moveRight_pressed()
+{
+    client->moveRight();
+}
+
+void MainWindow::on_moveBack_pressed()
+{
+    client->moveBack();
+}

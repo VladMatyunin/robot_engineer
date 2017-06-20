@@ -47,6 +47,10 @@ public:
     RobotController();
     RemoteControlPacket* turnLight();
     RemoteControlPacket* getBasicPacket();
+    RemoteControlPacket* moveForwardPacket();
+    RemoteControlPacket* moveBackPacket();
+    RemoteControlPacket* moveLeftPacket();
+    RemoteControlPacket* moveRightPacket();
 
     
 };

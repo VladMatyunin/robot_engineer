@@ -16,10 +16,8 @@ UDPClient::UDPClient():QObject()
 {
     m_pudp = new QUdpSocket(this);
     controller = new RobotController;
-    m_pudp->bind(2424);
-    robotAddress = new QHostAddress("192.168.1.11");
-    connect(m_pudp,SIGNAL(connected()),this,SLOT(startTimerTask()));
-    connect(m_pudp,SIGNAL(readyRead()),this,SLOT(listenRobot()));
+    robotAddress = new QHostAddress("10.42.0.1");
+
 }
 
 
@@ -33,20 +31,15 @@ void UDPClient::listenRobot(){
     }while(m_pudp->hasPendingDatagrams());
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
     qDebug()<<"Got info from robot";
-    writeInputToFile(&in);
 }
 
 
 
 void UDPClient::processData(bool isLight){
-    QByteArray baDatagram;
-    QDataStream out(&baDatagram,QIODevice::ReadWrite);
-    out.setVersion(QDataStream::Qt_5_2);
-    RemoteControlPacket *packet = controller->turnLight();
 
-    qDebug()<<sizeof(*packet);
-    putData(out,*packet);
-    m_pudp->writeDatagram(baDatagram,*robotAddress,ROBOT_PORT);
+    RemoteControlPacket *packet = controller->turnLight();
+    sendPacket(*packet);
+    delete packet;
 }
 UDPClient::~UDPClient(){
     m_pudp->close();
@@ -55,43 +48,74 @@ UDPClient::~UDPClient(){
     delete robotAddress;
 }
 
+void UDPClient::moveForward(){
+    RemoteControlPacket *packet = controller->moveForwardPacket();
+    sendPacket(*packet);
+    delete packet;
+}
+
+void UDPClient::moveBack(){
+    RemoteControlPacket *packet = controller->moveBackPacket();
+    sendPacket(*packet);
+    delete packet;
+}
+
+void UDPClient::moveLeft(){
+    RemoteControlPacket *packet = controller->moveLeftPacket();
+    sendPacket(*packet);
+    delete packet;
+}
+void UDPClient::moveRight(){
+    RemoteControlPacket *packet = controller->moveRightPacket();
+    sendPacket(*packet);
+    delete packet;
+}
 
 
 void UDPClient::startTimerTask(){
     connect(&timer, SIGNAL(timeout()), this, SLOT(sendLivePackets()));
-    timer.start(1000);
+    timer.start(500);
 }
 
 
 
 void UDPClient::sendLivePackets(){
-        QByteArray baDatagram;
-
-        QDataStream out(&baDatagram,QIODevice::ReadWrite);
-        out.setVersion(QDataStream::Qt_5_2);
         RemoteControlPacket *packet = controller->getBasicPacket();
-        putData(out,*packet);
-        m_pudp->writeDatagram(baDatagram,*robotAddress,ROBOT_PORT);
+        sendPacket(*packet);
+
+}
+void UDPClient::sendPacket(RemoteControlPacket packet){
+    QByteArray baDatagram;
+    QDataStream out(&baDatagram,QIODevice::ReadWrite);
+    out.setVersion(QDataStream::Qt_5_2);
+    putData(out,packet);
+    m_pudp->writeDatagram(baDatagram,*robotAddress,ROBOT_PORT);
 
 }
 
 
+
 void UDPClient::putData(QDataStream &out, const RemoteControlPacket &packet){
     out.writeRawData((char*)&packet,57);
-
-//    out.writeRawData((char*)packet.AXIS, 16*sizeof(char));
-//    out.writeRawData((char*)packet.BUTTON,16*sizeof(char));
-//    out << packet.TELEMETRY;
-    }
+}
 
 
 
-void UDPClient::writeInputToFile(QDataStream *out){
-    QString filename="/home/vlad/Desktop/Robotics/qt_helloworld/robot_logs/logs.txt";
+void UDPClient::writeInputToFile(char *data){
+    QString filename="/home/vladm/Desktop/robot_engineer/qt_helloworld/robot_logs/logs.txt";
     QFile file( filename );
     if ( file.open(QIODevice::ReadWrite) )
     {
         QTextStream stream( &file );
-        //stream << *((char*)packet)<< endl;
+
+        stream << atoi(data)<< endl;
+        stream.flush();
+
     }
+}
+
+void UDPClient::connectToRobot(){
+    m_pudp->bind(*robotAddress,ROBOT_PORT);
+    connect(m_pudp,SIGNAL(connected()),this,SLOT(startTimerTask()));
+    connect(m_pudp,SIGNAL(readyRead()),this,SLOT(listenRobot()));
 }
