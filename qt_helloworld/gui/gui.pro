@@ -15,12 +15,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     myudpclient.cpp \
-    myudpserver.cpp \
-    robotcontroller.cpp
+    robotcontroller.cpp \
+    robot.cpp \
+    robotconfiguration.cpp \
+    robotsettings.cpp
 
 HEADERS  += mainwindow.h \
-    myudpclient.h \
-    myudpserver.h \
-    robotcontroller.h
+    myudpclient.h\
+    robotcontroller.h \
+    robot.h \
+    robotconfiguration.h \
+    robotsettings.h \
+    robotPackets.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    robotsettings.ui

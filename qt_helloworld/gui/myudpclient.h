@@ -2,12 +2,13 @@
 #define MYUDPCLIENT_H
 #include <QObject>
 #include <QtNetwork/QUdpSocket>
-#include <robotcontroller.h>
 #include <QThread>
 #include <QTimer>
 #include <QDataStream>
 #include <QHostAddress>
+#include "robotPackets.h"
 #define ROBOT_PORT 10000
+class RobotController;
 class UDPClient : public QObject{
     Q_OBJECT
     public slots:
@@ -16,25 +17,20 @@ class UDPClient : public QObject{
         void listenRobot();
 private:
     QUdpSocket *m_pudp;
-    RobotController *controller;
-    QThread *thread;
-    QTimer timer;
     QHostAddress *robotAddress;
     void writeInputToFile(char *data);
-    void sendPacket(RemoteControlPacket packet);
-
+    RobotController *controller;
+    QTimer *timer;
 
 
 public:
+    UDPClient(RobotController *controller);
     UDPClient();
     void putData(QDataStream &out, const RemoteControlPacket &packet);
     void processData(bool);
+    void sendPacket(RemoteControlPacket packet);
     ~UDPClient();
     void connectToRobot();
-    void moveForward();
-    void moveBack();
-    void moveLeft();
-    void moveRight();
 
 };
 #endif // UDPCLIENT_H

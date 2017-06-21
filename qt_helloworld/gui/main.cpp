@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <QCheckBox>
-#include <myudpserver.h>
 #include <mainwindow.h>
 int main(int argc, char *argv[])
 {

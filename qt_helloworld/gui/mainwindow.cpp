@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "myudpclient.h"
+#include "robot.h"
+#include "QDebug"
 using namespace std
 ;
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     client = new UDPClient();
+    robot = new Robot();
 }
 
 MainWindow::~MainWindow()
@@ -17,36 +20,76 @@ MainWindow::~MainWindow()
     delete client;
 }
 
-void MainWindow::on_checkBox_toggled(bool checked)
-{
-    isLight=!isLight;
-    qDebug()<<isLight;
-    client->processData(isLight);
-}
-
-void MainWindow::on_pushButton_5_clicked()
-{
-    client->connectToRobot();
-}
-
-
 
 void MainWindow::on_moveForward_pressed()
 {
-    client->moveForward();
+    robot->moveForward();
 }
 
 void MainWindow::on_moveLeft_pressed()
 {
-    client->moveLeft();
+    robot->moveLeft();
 }
 
 void MainWindow::on_moveRight_pressed()
 {
-    client->moveRight();
+    robot->moveRight();
 }
 
 void MainWindow::on_moveBack_pressed()
 {
-    client->moveBack();
+    robot->moveBack();
+}
+
+void MainWindow::on_lightToggle_clicked()
+{
+    isLight = !isLight;
+    robot->turnLight();
+}
+
+void MainWindow::on_connectButton_clicked()
+{
+    client->connectToRobot();
+}
+
+void MainWindow::on_horizontalSlider_sliderMoved(int position)
+{
+    qDebug()<<"moved";
+    robot->turnWaist();
+}
+
+void MainWindow::on_horizontalSlider_2_rangeChanged(int min, int max)
+{
+    robot->turnWaist();
+}
+
+void MainWindow::on_flippersUp_clicked()
+{
+    robot->flippersUp();
+}
+
+void MainWindow::on_flipers_down_rangeChanged(int min, int max)
+{
+    qDebug()<<min<<max;
+}
+
+void MainWindow::on_flipers_down_sliderMoved(int position)
+{
+    //qDebug()<<position;
+    robot->flippersDown(position);
+}
+
+void MainWindow::on_openGripper_clicked()
+{
+    robot->openGripper();
+}
+
+void MainWindow::on_closeGripper_clicked()
+{
+    robot->closeGripper();
+}
+
+void MainWindow::on_test_clicked()
+{
+    robot->turnWaist();
 }
