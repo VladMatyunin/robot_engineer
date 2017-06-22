@@ -36,7 +36,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_6">
+          <widget class="QPushButton" name="settings">
            <property name="text">
             <string>Settings</string>
            </property>
@@ -129,10 +129,16 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBothSides</enum>
+           </property>
+           <property name="tickInterval">
+            <number>1000</number>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="horizontalSlider_2">
+          <widget class="QSlider" name="neckSlider">
            <property name="value">
             <number>50</number>
            </property>
@@ -142,7 +148,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="horizontalSlider_3">
+          <widget class="QSlider" name="waist">
            <property name="value">
             <number>50</number>
            </property>
@@ -346,17 +352,20 @@
      <string>Close Gripper</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="test">
+   <widget class="QSlider" name="waistUpDown">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>380</y>
-      <width>99</width>
-      <height>27</height>
+      <x>630</x>
+      <y>400</y>
+      <width>160</width>
+      <height>29</height>
      </rect>
     </property>
-    <property name="text">
-     <string>test</string>
+    <property name="value">
+     <number>50</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>

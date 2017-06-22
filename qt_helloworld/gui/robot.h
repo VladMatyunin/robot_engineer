@@ -13,13 +13,20 @@ public:
     void moveLeft();
     void moveRight();
     void turnLight();
-    void turnWaist();
+    void turnWaist(int speed);
+    void moveWaist(int speed);
+    void turnNeck(int speed);
+    void turnElbowAndNeck(int speed);
     void flippersUp();
     void flippersDown(int speed);
     void openGripper();
     void closeGripper();
+
+    RobotConfiguration* getConfiguration();
+
 private:
     RobotConfiguration *configuration;
+    int getRealSpeed(int uiSpeed);
 };
 
 #endif // ROBOT_H

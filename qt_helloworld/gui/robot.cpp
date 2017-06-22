@@ -21,9 +21,7 @@ Robot::Robot()
     void Robot::turnLight(){
         controller->turnLight();
     }
-    void Robot::turnWaist(){
-        controller->moveJoint();
-    }
+
     void Robot::flippersUp(){
         controller->setFlippersUp();
     }
@@ -43,6 +41,32 @@ Robot::Robot()
     void Robot::closeGripper(){
         controller->gripper(false);
     }
+    RobotConfiguration* Robot::getConfiguration(){
+        return configuration;
+    }
+    void Robot::turnElbowAndNeck(int speed){
+        controller->elbowNeck(getRealSpeed(speed));
+    }
+    void Robot::turnNeck(int speed){
+        controller->neck(getRealSpeed(speed));
+    }
+
+    int Robot::getRealSpeed(int speed){
+        int realSpeed = 0;
+        if (speed>50) realSpeed = speed*320;
+        else{
+            speed-=50;
+            realSpeed = speed*320;
+        }
+        return realSpeed;
+    }
+    void Robot::turnWaist(int speed){
+        controller->waist(getRealSpeed(speed));
+    }
+    void Robot::moveWaist(int speed){
+        controller->waistUpDown(getRealSpeed(speed));
+    }
+
 
 Robot::~Robot(){
     delete configuration;

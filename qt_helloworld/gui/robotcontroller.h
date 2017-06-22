@@ -27,6 +27,10 @@ public:
     void setFlippersUp();
     void setFlippersDown(int realSpeed);
     void gripper(bool open);
+    void elbowNeck(int speed);
+    void neck(int speed);
+    void waist(int speed);
+    void waistUpDown(int speed);
 };
 
 #endif // ROBOTCONTROLLER_H

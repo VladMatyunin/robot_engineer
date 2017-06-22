@@ -32,7 +32,7 @@
     <property name="title">
      <string>platform</string>
     </property>
-    <widget class="QSlider" name="horizontalSlider_2">
+    <widget class="QSlider" name="platform_forward_settings">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -41,11 +41,17 @@
        <height>29</height>
       </rect>
      </property>
+     <property name="maximum">
+      <number>32000</number>
+     </property>
+     <property name="singleStep">
+      <number>1000</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QSlider" name="horizontalSlider">
+    <widget class="QSlider" name="platform_settings_rotate">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -53,6 +59,18 @@
        <width>160</width>
        <height>29</height>
       </rect>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>32000</number>
+     </property>
+     <property name="singleStep">
+      <number>1000</number>
+     </property>
+     <property name="value">
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -84,7 +102,7 @@
       <string>rotate</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="fwrd_platf_input">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -93,8 +111,11 @@
        <height>27</height>
       </rect>
      </property>
+     <property name="maxLength">
+      <number>5</number>
+     </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="rt_platf_input">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -102,6 +123,9 @@
        <width>61</width>
        <height>27</height>
       </rect>
+     </property>
+     <property name="maxLength">
+      <number>5</number>
      </property>
     </widget>
    </widget>

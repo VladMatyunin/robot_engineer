@@ -3,8 +3,8 @@
 #include "myudpclient.h"
 #include "robot.h"
 #include "QDebug"
-using namespace std
-;
+#include "robotsettings.h"
+using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -55,13 +55,11 @@ void MainWindow::on_connectButton_clicked()
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
     qDebug()<<"moved";
-    robot->turnWaist();
+    robot->turnElbowAndNeck(position);
+
 }
 
-void MainWindow::on_horizontalSlider_2_rangeChanged(int min, int max)
-{
-    robot->turnWaist();
-}
+
 
 void MainWindow::on_flippersUp_clicked()
 {
@@ -91,5 +89,50 @@ void MainWindow::on_closeGripper_clicked()
 
 void MainWindow::on_test_clicked()
 {
-    robot->turnWaist();
+    //robot->turnWaist();
+}
+
+void MainWindow::on_settings_clicked()
+{
+    settings = new RobotSettings();
+    settings->show();
+}
+
+void MainWindow::on_neckSlider_sliderMoved(int position)
+{
+    robot->turnNeck(position);
+
+
+}
+
+void MainWindow::on_horizontalSlider_sliderReleased()
+{
+    ui->horizontalSlider->setValue(50);
+}
+
+void MainWindow::on_neckSlider_sliderReleased()
+{
+     ui->neckSlider->setValue(50);
+}
+
+void MainWindow::on_waist_sliderMoved(int position)
+{
+    robot->turnWaist(position);
+}
+
+
+void MainWindow::on_waistUpDown_sliderMoved(int position)
+{
+    robot->moveWaist(position);
+}
+
+void MainWindow::on_waistUpDown_sliderReleased()
+{
+    ui->waistUpDown->setValue(50);
+}
+
+
+void MainWindow::on_waist_sliderReleased()
+{
+    ui->waist->setValue(50);
 }

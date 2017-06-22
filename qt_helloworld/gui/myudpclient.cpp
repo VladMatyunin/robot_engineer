@@ -18,12 +18,13 @@ UDPClient::UDPClient(RobotController *controller):QObject()
     m_pudp = new QUdpSocket(this);
     robotAddress = new QHostAddress("10.42.0.1");
     this->controller = controller;
+    timer = new QTimer();
 }
 UDPClient::UDPClient():QObject()
 {
     m_pudp = new QUdpSocket(this);
     robotAddress = new QHostAddress("10.42.0.1");
-
+    timer = new QTimer();
 }
 
 
@@ -35,6 +36,20 @@ void UDPClient::listenRobot(){
 
     }while(m_pudp->hasPendingDatagrams());
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
+
+    do {
+        char* buffer = new char[1];
+        in.readRawData(buffer,1);
+        if(buffer[0]==2){
+            char* packet = new char[275];
+            in>>packet;
+            TelemetryPacket *telPacket = reinterpret_cast<TelemetryPacket*>(packet);
+            qDebug()<<"GOT TELEMETRY";
+            delete packet, telPacket;
+        }
+        delete buffer;
+    }while (!in.atEnd());
+
     qDebug()<<"Got info from robot";
 }
 
@@ -76,10 +91,12 @@ void UDPClient::connectToRobot(){
     m_pudp->bind(*robotAddress,ROBOT_PORT);
     connect(m_pudp,SIGNAL(readyRead()),this,SLOT(listenRobot()));
     connect(m_pudp,SIGNAL(connected()),this,SLOT(startTimerTask()));
+
+    startTimerTask();
 }
 void UDPClient::startTimerTask(){
     connect(timer, SIGNAL(timeout()), this, SLOT(sendLivePackets()));
-    timer->start(500);
+    timer->start(1000);
 }
 
 

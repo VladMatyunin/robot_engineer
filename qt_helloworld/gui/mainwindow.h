@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <myudpclient.h>
 #include "robot.h"
+#include "robotsettings.h"
 namespace Ui {
 class MainWindow;
 }
@@ -34,7 +35,6 @@ private slots:
 
     void on_horizontalSlider_sliderMoved(int position);
 
-    void on_horizontalSlider_2_rangeChanged(int min, int max);
 
     void on_flippersUp_clicked();
 
@@ -48,11 +48,28 @@ private slots:
 
     void on_test_clicked();
 
+    void on_settings_clicked();
+
+    void on_neckSlider_sliderMoved(int position);
+
+    void on_horizontalSlider_sliderReleased();
+
+    void on_neckSlider_sliderReleased();
+
+    void on_waist_sliderMoved(int position);
+
+    void on_waistUpDown_sliderMoved(int position);
+
+    void on_waistUpDown_sliderReleased();
+
+    void on_waist_sliderReleased();
+
 private:
     Ui::MainWindow *ui;
     bool isLight;
     UDPClient *client;
     Robot *robot;
+    RobotSettings *settings;
 };
 
 #endif // MAINWINDOW_H

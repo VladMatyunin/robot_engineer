@@ -62,8 +62,10 @@ void RobotController::movePlatformRotate(bool direction, int speed){
 void RobotController::moveJoint(){
     RemoteControlPacket *packet = getBasicPacket();
     //packet->BUTTON[10] = 1;
-    packet->AXIS[4] = -5000;
+    packet->AXIS[3] = 15000;
+    //for(int i = 0; i < 5; ++i)
     client->sendPacket(*packet);
+    qDebug()<<"SEEEEEENDDDD===============";
 }
 
 void RobotController::setFlippersUp(){
@@ -89,4 +91,29 @@ void RobotController::gripper(bool open){
     client->sendPacket(*packet);
 }
 
+void RobotController::neck(int speed){
+    RemoteControlPacket *packet = getBasicPacket();
+    packet->AXIS[4] = speed;
+    client->sendPacket(*packet);
+}
+void RobotController::elbowNeck(int speed){
+    RemoteControlPacket *packet = getBasicPacket();
+    packet->AXIS[4] = speed;
+    packet->BUTTON[10] = 1;
+    client->sendPacket(*packet);
+}
 
+void RobotController::waist(int speed){
+    qDebug()<<"MOOOOOOOOOOVED";
+    RemoteControlPacket *packet = getBasicPacket();
+    packet->BUTTON[9] = 1;
+    packet->AXIS[0] = speed;
+    client->sendPacket(*packet);
+}
+
+void RobotController::waistUpDown(int speed){
+    RemoteControlPacket *packet = getBasicPacket();
+    packet->BUTTON[9] = 1;
+    packet->AXIS[1] = speed;
+    client->sendPacket(*packet);
+}
