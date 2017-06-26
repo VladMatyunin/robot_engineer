@@ -11,17 +11,18 @@ RobotController::RobotController():QObject()
 {
     client = new UDPClient(this);
     timer = new QTimer();
+    packet = getBasicPacket();
 }
 
 RobotController::~RobotController(){
     delete client;
     delete timer;
+    delete packet;
 }
 
 void RobotController::turnLight(){
     RemoteControlPacket *packet = getBasicPacket();
     packet->BUTTON[1] = 1;
-
     client->sendPacket(*packet);
 }
 RemoteControlPacket* RobotController::getBasicPacket(){
@@ -37,83 +38,56 @@ RemoteControlPacket* RobotController::getBasicPacket(){
 /*
  * if direction is true - move forward, else move back
  */
-void RobotController::movePlatformDirect(bool direction, int speed){
-    RemoteControlPacket *packet = getBasicPacket();
-    if (direction)
-        packet->AXIS[1] = -speed;
-    else
-        packet->AXIS[1] = speed;
-    client->sendPacket(*packet);
+void RobotController::movePlatformDirect(int speed){
+    packet->AXIS[1] = speed;
 }
 
 
 /*
  * if direction is true - move right, else move left
  */
-void RobotController::movePlatformRotate(bool direction, int speed){
-    RemoteControlPacket *packet = getBasicPacket();
-    if (direction)
-        packet->AXIS[0] = speed;
-    else
-        packet->AXIS[0] = -speed;
-    client->sendPacket(*packet);
-}
-
-void RobotController::moveJoint(){
-    RemoteControlPacket *packet = getBasicPacket();
-    //packet->BUTTON[10] = 1;
-    packet->AXIS[3] = 15000;
-    //for(int i = 0; i < 5; ++i)
-    client->sendPacket(*packet);
-    qDebug()<<"SEEEEEENDDDD===============";
+void RobotController::movePlatformRotate(int speed){
+    packet->AXIS[0] = speed;
 }
 
 void RobotController::setFlippersUp(){
-    RemoteControlPacket *packet = getBasicPacket();
     packet->BUTTON[5] = 1;
-    client->sendPacket(*packet);
 }
 
 
-void RobotController::setFlippersDown(int realSpeed){
-    RemoteControlPacket *packet = getBasicPacket();
+void RobotController::setFlippersDown(){
     packet->AXIS[5] = 1;
-    qDebug()<<realSpeed;
-    client->sendPacket(*packet);
 }
 
 void RobotController::gripper(bool open){
-    RemoteControlPacket *packet = getBasicPacket();
     if(open){
         packet->BUTTON[0] = 1;
     }
     else packet->BUTTON[3] = 1;
-    client->sendPacket(*packet);
 }
 
 void RobotController::neck(int speed){
-    RemoteControlPacket *packet = getBasicPacket();
     packet->AXIS[4] = speed;
-    client->sendPacket(*packet);
 }
 void RobotController::elbowNeck(int speed){
-    RemoteControlPacket *packet = getBasicPacket();
     packet->AXIS[4] = speed;
     packet->BUTTON[10] = 1;
-    client->sendPacket(*packet);
 }
 
 void RobotController::waist(int speed){
-    qDebug()<<"MOOOOOOOOOOVED";
-    RemoteControlPacket *packet = getBasicPacket();
     packet->BUTTON[9] = 1;
     packet->AXIS[0] = speed;
-    client->sendPacket(*packet);
 }
 
 void RobotController::waistUpDown(int speed){
-    RemoteControlPacket *packet = getBasicPacket();
     packet->BUTTON[9] = 1;
     packet->AXIS[1] = speed;
-    client->sendPacket(*packet);
+}
+void RobotController::stopFlippers(){
+    packet->BUTTON[5] = 0;
+    packet->AXIS[5] = 0;
+}
+void RobotController::stopGripper(){
+    packet->BUTTON[0] = 0;
+    packet->BUTTON[3] = 0;
 }

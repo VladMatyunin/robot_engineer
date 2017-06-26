@@ -6,34 +6,30 @@ Robot::Robot()
     controller = new RobotController();
     configuration = new RobotConfiguration(5000,16000,false);
 }
-    void Robot::moveBack(){
-        controller->movePlatformDirect(false, configuration->platformForwardSpeed);
+    void Robot::moveBack(int speed){
+        controller->movePlatformDirect(getRealSpeed(speed));
     }
-    void Robot::moveForward(){
-        controller->movePlatformDirect(true, configuration->platformForwardSpeed);
+    void Robot::moveForward(int speed){
+        controller->movePlatformDirect(getRealSpeed(speed));
     }
-    void Robot::moveLeft(){
-        controller->movePlatformRotate(false, configuration->platformRotateSpeed);
+    void Robot::moveLeft(int speed){
+        controller->movePlatformRotate(getRealSpeed(speed));
     }
-    void Robot::moveRight(){
-        controller->movePlatformRotate(true, configuration->platformRotateSpeed);
+    void Robot::moveRight(int speed){
+        controller->movePlatformRotate(getRealSpeed(speed));
     }
     void Robot::turnLight(){
         controller->turnLight();
     }
 
-    void Robot::flippersUp(){
-        controller->setFlippersUp();
-    }
-    void Robot::flippersDown(int speed){
-        int realSpeed = 0;
-        if (speed>50) realSpeed = speed*60;
-        else{
-            speed-=50;
-            realSpeed = speed*60;
+    void Robot::flippers(int direction){
+        switch (direction){
+        case 1: controller->setFlippersUp(); break;
+        case -1: controller->setFlippersDown(); break;
+        default: controller->stopFlippers(); break;
         }
-        controller->setFlippersDown(speed);
     }
+
     void Robot::openGripper(){
         controller->gripper(true);
     }
@@ -53,11 +49,7 @@ Robot::Robot()
 
     int Robot::getRealSpeed(int speed){
         int realSpeed = 0;
-        if (speed>50) realSpeed = speed*320;
-        else{
-            speed-=50;
-            realSpeed = speed*320;
-        }
+        realSpeed = (speed-50)*150;
         return realSpeed;
     }
     void Robot::turnWaist(int speed){
@@ -65,6 +57,17 @@ Robot::Robot()
     }
     void Robot::moveWaist(int speed){
         controller->waistUpDown(getRealSpeed(speed));
+    }
+
+    void Robot::gripper(int direction){
+        switch (direction) {
+        case 1: controller->gripper(true);
+
+            break;
+        case -1: controller->gripper(false);
+        default: controller->stopGripper();
+            break;
+        }
     }
 
 

@@ -21,13 +21,6 @@ public:
 
 
 private slots:
-    void on_moveForward_pressed();
-
-    void on_moveLeft_pressed();
-
-    void on_moveRight_pressed();
-
-    void on_moveBack_pressed();
 
     void on_lightToggle_clicked();
 
@@ -35,34 +28,28 @@ private slots:
 
     void on_horizontalSlider_sliderMoved(int position);
 
-
-    void on_flippersUp_clicked();
-
-    void on_flipers_down_rangeChanged(int min, int max);
-
-    void on_flipers_down_sliderMoved(int position);
-
-    void on_openGripper_clicked();
-
-    void on_closeGripper_clicked();
-
-    void on_test_clicked();
-
     void on_settings_clicked();
 
     void on_neckSlider_sliderMoved(int position);
 
-    void on_horizontalSlider_sliderReleased();
-
-    void on_neckSlider_sliderReleased();
 
     void on_waist_sliderMoved(int position);
 
     void on_waistUpDown_sliderMoved(int position);
 
-    void on_waistUpDown_sliderReleased();
 
-    void on_waist_sliderReleased();
+    void on_flipers_sliderMoved(int position);
+
+
+    void on_gripper_sliderMoved(int position);
+
+
+    void on_platformR_sliderMoved(int position);
+
+
+    void on_platformF_sliderMoved(int position);
+
+    void on_gripper_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

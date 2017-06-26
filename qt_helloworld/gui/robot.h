@@ -8,20 +8,19 @@ public:
     RobotController *controller;
     ~Robot();
     Robot();
-    void moveForward();
-    void moveBack();
-    void moveLeft();
-    void moveRight();
+    void moveForward(int speed);
+    void moveBack(int speed);
+    void moveLeft(int speed);
+    void moveRight(int speed);
     void turnLight();
     void turnWaist(int speed);
     void moveWaist(int speed);
     void turnNeck(int speed);
     void turnElbowAndNeck(int speed);
-    void flippersUp();
-    void flippersDown(int speed);
+    void flippers(int direction);
     void openGripper();
     void closeGripper();
-
+    void gripper(int direction);
     RobotConfiguration* getConfiguration();
 
 private:

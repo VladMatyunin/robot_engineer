@@ -25,6 +25,7 @@ UDPClient::UDPClient():QObject()
     m_pudp = new QUdpSocket(this);
     robotAddress = new QHostAddress("10.42.0.1");
     timer = new QTimer();
+    this->controller = new RobotController();
 }
 
 
@@ -101,6 +102,6 @@ void UDPClient::startTimerTask(){
 
 
 void UDPClient::sendLivePackets(){
-        RemoteControlPacket *packet = controller->getBasicPacket();
+        RemoteControlPacket *packet = controller->packet;
         sendPacket(*packet);
 }

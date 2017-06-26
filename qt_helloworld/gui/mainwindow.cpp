@@ -10,35 +10,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    client = new UDPClient();
     robot = new Robot();
+    client = new UDPClient(robot->controller);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete client;
-}
-
-
-void MainWindow::on_moveForward_pressed()
-{
-    robot->moveForward();
-}
-
-void MainWindow::on_moveLeft_pressed()
-{
-    robot->moveLeft();
-}
-
-void MainWindow::on_moveRight_pressed()
-{
-    robot->moveRight();
-}
-
-void MainWindow::on_moveBack_pressed()
-{
-    robot->moveBack();
 }
 
 void MainWindow::on_lightToggle_clicked()
@@ -59,39 +38,6 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 
 }
 
-
-
-void MainWindow::on_flippersUp_clicked()
-{
-    robot->flippersUp();
-}
-
-void MainWindow::on_flipers_down_rangeChanged(int min, int max)
-{
-    qDebug()<<min<<max;
-}
-
-void MainWindow::on_flipers_down_sliderMoved(int position)
-{
-    //qDebug()<<position;
-    robot->flippersDown(position);
-}
-
-void MainWindow::on_openGripper_clicked()
-{
-    robot->openGripper();
-}
-
-void MainWindow::on_closeGripper_clicked()
-{
-    robot->closeGripper();
-}
-
-void MainWindow::on_test_clicked()
-{
-    //robot->turnWaist();
-}
-
 void MainWindow::on_settings_clicked()
 {
     settings = new RobotSettings();
@@ -105,15 +51,7 @@ void MainWindow::on_neckSlider_sliderMoved(int position)
 
 }
 
-void MainWindow::on_horizontalSlider_sliderReleased()
-{
-    ui->horizontalSlider->setValue(50);
-}
 
-void MainWindow::on_neckSlider_sliderReleased()
-{
-     ui->neckSlider->setValue(50);
-}
 
 void MainWindow::on_waist_sliderMoved(int position)
 {
@@ -126,13 +64,41 @@ void MainWindow::on_waistUpDown_sliderMoved(int position)
     robot->moveWaist(position);
 }
 
-void MainWindow::on_waistUpDown_sliderReleased()
+
+
+void MainWindow::on_flipers_sliderMoved(int position)
 {
-    ui->waistUpDown->setValue(50);
+    if (position<40) robot->flippers(-1);
+    else if (position>60) robot->flippers(1);
+    else if (position<60 && position>40) robot->flippers(0);
+}
+
+void MainWindow::on_gripper_sliderMoved(int position)
+{
+    if (position<40){
+        ui->gripper->setValue(0);}
+    else if (position>60) { ui->gripper->setValue(100);}
+    else if (position<60 && position>40) { ui->gripper->setValue(50);}
+}
+
+void MainWindow::on_platformR_sliderMoved(int position)
+{
+    if (position>50) robot->moveRight(position);
+    else if (position<50) robot->moveLeft(position);
+}
+
+void MainWindow::on_platformF_sliderMoved(int position)
+{
+
+    if (position>50) robot->moveForward(position);
+    else if (position<50) robot->moveBack(position);
 }
 
 
-void MainWindow::on_waist_sliderReleased()
+void MainWindow::on_gripper_valueChanged(int position)
 {
-    ui->waist->setValue(50);
+    if (position<40){ robot->gripper(-1);
+        ui->gripper->setValue(0);}
+    else if (position>60) {robot->gripper(1); ui->gripper->setValue(100);}
+    else if (position<60 && position>40) {robot->gripper(0); ui->gripper->setValue(50);}
 }
