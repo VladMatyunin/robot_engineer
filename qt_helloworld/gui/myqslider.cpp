@@ -3,7 +3,7 @@
 #include <QDebug>
 MyQSlider::MyQSlider(QObject *parent)
 {
-    //connect(this, SIGNAL(sliderReleased()),this, SLOT(my_sliderMoved()));
+    connect(this, SIGNAL(sliderReleased()),this, SLOT(my_sliderMoved()));
 }
 
 void MyQSlider::my_sliderMoved(){
@@ -15,8 +15,4 @@ void MyQSlider::my_sliderMoved(){
 
     }
 }
-void MyQSlider::sliderReleased(){
-    int i = 0;
-    i++;
-    i = i*7;
-}
+

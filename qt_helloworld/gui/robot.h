@@ -8,10 +8,13 @@ public:
     RobotController *controller;
     ~Robot();
     Robot();
-    void moveForward(int speed);
-    void moveBack(int speed);
-    void moveLeft(int speed);
-    void moveRight(int speed);
+    /*
+     * moves robot platform directly(back or forward)
+     * if speed is greater that zero, robot moves back, else
+     * moves forward
+     */
+    void moveD(int speed);
+    void moveR(int speed);
     void turnLight();
     void turnWaist(int speed);
     void moveWaist(int speed);
@@ -21,6 +24,13 @@ public:
     void openGripper();
     void closeGripper();
     void gripper(int direction);
+
+    void stopGripper();
+    void stopFlippers();
+    void stopAll();
+
+
+
     RobotConfiguration* getConfiguration();
 
 private:

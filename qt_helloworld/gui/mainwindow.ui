@@ -115,7 +115,10 @@
               </widget>
              </item>
              <item row="1" column="0" colspan="2">
-              <widget class="QSlider" name="horizontalSlider">
+              <widget class="MyQSlider" name="neckSlider">
+               <property name="maximum">
+                <number>100</number>
+               </property>
                <property name="singleStep">
                 <number>10</number>
                </property>
@@ -148,7 +151,10 @@
               </widget>
              </item>
              <item row="3" column="0" colspan="2">
-              <widget class="QSlider" name="neckSlider">
+              <widget class="MyQSlider" name="elbowSlider">
+               <property name="maximum">
+                <number>100</number>
+               </property>
                <property name="singleStep">
                 <number>10</number>
                </property>
@@ -181,9 +187,12 @@
               </widget>
              </item>
              <item row="5" column="0" colspan="2">
-              <widget class="QSlider" name="waistUpDown">
+              <widget class="MyQSlider" name="waistUpDown">
                <property name="mouseTracking">
                 <bool>false</bool>
+               </property>
+               <property name="maximum">
+                <number>100</number>
                </property>
                <property name="singleStep">
                 <number>10</number>
@@ -223,7 +232,10 @@
               </widget>
              </item>
              <item row="7" column="0" colspan="2">
-              <widget class="QSlider" name="waist">
+              <widget class="MyQSlider" name="waistLeftRight">
+               <property name="maximum">
+                <number>100</number>
+               </property>
                <property name="singleStep">
                 <number>10</number>
                </property>
@@ -286,9 +298,12 @@
               </widget>
              </item>
              <item row="3" column="0" colspan="2">
-              <widget class="QSlider" name="platformR">
+              <widget class="MyQSlider" name="platformR">
                <property name="mouseTracking">
                 <bool>true</bool>
+               </property>
+               <property name="maximum">
+                <number>100</number>
                </property>
                <property name="singleStep">
                 <number>10</number>
@@ -329,6 +344,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="maximum">
+              <number>100</number>
              </property>
              <property name="singleStep">
               <number>10</number>
@@ -490,7 +508,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>down</string>
+         <string>close</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_7">
@@ -503,7 +521,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>up</string>
+         <string>open</string>
         </property>
        </widget>
       </widget>
@@ -521,23 +539,17 @@
        <string>Accept</string>
       </property>
      </widget>
-     <widget class="QScrollBar" name="horizontalScrollBar">
+     <widget class="QPushButton" name="stopAll">
       <property name="geometry">
        <rect>
-        <x>620</x>
-        <y>480</y>
-        <width>160</width>
-        <height>16</height>
+        <x>650</x>
+        <y>640</y>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
-      <property name="singleStep">
-       <number>10</number>
-      </property>
-      <property name="value">
-       <number>50</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+      <property name="text">
+       <string>StopAll</string>
       </property>
      </widget>
     </widget>

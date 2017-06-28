@@ -97,7 +97,7 @@ void UDPClient::connectToRobot(){
 }
 void UDPClient::startTimerTask(){
     connect(timer, SIGNAL(timeout()), this, SLOT(sendLivePackets()));
-    timer->start(1000);
+    timer->start(300);
 }
 
 

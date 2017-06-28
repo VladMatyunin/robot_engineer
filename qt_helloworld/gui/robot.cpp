@@ -6,16 +6,13 @@ Robot::Robot()
     controller = new RobotController();
     configuration = new RobotConfiguration(5000,16000,false);
 }
-    void Robot::moveBack(int speed){
-        controller->movePlatformDirect(getRealSpeed(speed));
+
+    void Robot::moveD(int speed){
+        //minus because forward is <(lt)0, back is >(gt)0
+        controller->movePlatformDirect(-getRealSpeed(speed));
     }
-    void Robot::moveForward(int speed){
-        controller->movePlatformDirect(getRealSpeed(speed));
-    }
-    void Robot::moveLeft(int speed){
-        controller->movePlatformRotate(getRealSpeed(speed));
-    }
-    void Robot::moveRight(int speed){
+
+    void Robot::moveR(int speed){
         controller->movePlatformRotate(getRealSpeed(speed));
     }
     void Robot::turnLight(){
@@ -41,16 +38,16 @@ Robot::Robot()
         return configuration;
     }
     void Robot::turnElbowAndNeck(int speed){
-        controller->elbowNeck(getRealSpeed(speed));
+        controller->elbowNeck(-getRealSpeed(speed));
     }
     void Robot::turnNeck(int speed){
-        qDebug()<<"SEEEND";
-        controller->neck(getRealSpeed(speed));
+        controller->neck(-getRealSpeed(speed));
     }
 
     int Robot::getRealSpeed(int speed){
         int realSpeed = 0;
-        realSpeed = (speed-50)*150;
+        realSpeed = (speed-50)*200;
+        qDebug()<<realSpeed;
         return realSpeed;
     }
     void Robot::turnWaist(int speed){
@@ -65,12 +62,22 @@ Robot::Robot()
         case 1: controller->gripper(true);
 
             break;
-        case -1: controller->gripper(false);
+        case -1: controller->gripper(false); break;
         default: controller->stopGripper();
             break;
         }
     }
 
+void Robot::stopAll(){
+    controller->stopElbowNeck();
+    controller->stopNeck();
+    controller->stopWaist();
+    controller->stopWaistUpDown();
+    controller->stopPlatformD();
+    controller->stopPlatformR();
+    controller->stopFlippers();
+    controller->stopGripper();
+}
 
 Robot::~Robot(){
     delete configuration;

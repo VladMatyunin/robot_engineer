@@ -30,8 +30,16 @@ public:
     void neck(int speed);
     void waist(int speed);
     void waistUpDown(int speed);
+
+    void stopElbowNeck();
+    void stopNeck();
+    void stopWaist();
+    void stopWaistUpDown();
+    void stopPlatformD();
+    void stopPlatformR();
     void stopGripper();
     void stopFlippers();
+
 };
 
 #endif // ROBOTCONTROLLER_H

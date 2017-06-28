@@ -15,8 +15,6 @@ signals:
 public slots:
     void my_sliderMoved();
 
-    void sliderReleased();
-
 };
 
 #endif // MYQSLIDER_H

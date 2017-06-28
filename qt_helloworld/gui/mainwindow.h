@@ -5,6 +5,7 @@
 #include <myudpclient.h>
 #include "robot.h"
 #include "robotsettings.h"
+#include <QEvent>
 namespace Ui {
 class MainWindow;
 }
@@ -13,7 +14,9 @@ class MainWindow : public QMainWindow
 {
     class JointForm;
     Q_OBJECT
-
+protected:
+    bool eventFilter(QObject* obj, QEvent* event);
+    void setSlidersToStart();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -28,17 +31,7 @@ private slots:
 
     void on_connectButton_clicked();
 
-    void on_horizontalSlider_sliderMoved(int position);
-
     void on_settings_clicked();
-
-    void on_neckSlider_sliderMoved(int position);
-
-    void on_waist_sliderMoved(int position);
-
-    void on_waistUpDown_sliderMoved(int position);
-
-    void on_platformR_sliderMoved(int position);
 
     void on_gripper_valueChanged(int value);
 
@@ -46,13 +39,20 @@ private slots:
 
     void on_acceptForms_clicked();
 
-    void on_platformF_sliderReleased();
-
-    void on_platformF_rangeChanged(int min, int max);
-
-    void on_platformF_sliderMoved(int position);
 
     void on_platformF_valueChanged(int value);
+
+    void on_platformR_valueChanged(int value);
+
+    void on_stopAll_clicked();
+
+    void on_waistLeftRight_valueChanged(int value);
+
+    void on_elbowSlider_valueChanged(int value);
+
+    void on_neckSlider_valueChanged(int value);
+
+    void on_waistUpDown_valueChanged(int value);
 
 private:
 
