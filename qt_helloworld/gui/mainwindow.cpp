@@ -13,6 +13,26 @@ MainWindow::MainWindow(QWidget *parent) :
     robot = new Robot();
     client = new UDPClient(robot->controller);
 }
+MainWindow::JointForm::JointForm(MainWindow *ui){
+    this->window = ui;
+}
+
+void MainWindow::JointForm::validateValues(){
+    this->elbow = validateValue(window->ui->elbowLineEdit->text());
+    this->neck = validateValue(window->ui->neckLineEdit->text());
+    this->shoulder = validateValue(window->ui->shoulderLineEdit->text());
+    this->waist = validateValue(window->ui->waistLineEdit->text());
+    this->platformF = validateValue(window->ui->platformForwardLineEdit->text());
+    this->platformR = validateValue(window->ui->platformRLineEdit->text());
+
+}
+int MainWindow::JointForm::validateValue(QString value){
+    if(value.isNull()|| value.isEmpty())
+        return 0;
+    return value.toInt();
+}
+
+
 
 MainWindow::~MainWindow()
 {
@@ -46,11 +66,13 @@ void MainWindow::on_settings_clicked()
 
 void MainWindow::on_neckSlider_sliderMoved(int position)
 {
+    if (position%10!=0){
+        ui->neckSlider->setValue((position/10+1)*10);
+    }else
     robot->turnNeck(position);
 
 
 }
-
 
 
 void MainWindow::on_waist_sliderMoved(int position)
@@ -64,41 +86,53 @@ void MainWindow::on_waistUpDown_sliderMoved(int position)
     robot->moveWaist(position);
 }
 
-
-
-void MainWindow::on_flipers_sliderMoved(int position)
-{
-    if (position<40) robot->flippers(-1);
-    else if (position>60) robot->flippers(1);
-    else if (position<60 && position>40) robot->flippers(0);
-}
-
-void MainWindow::on_gripper_sliderMoved(int position)
-{
-    if (position<40){
-        ui->gripper->setValue(0);}
-    else if (position>60) { ui->gripper->setValue(100);}
-    else if (position<60 && position>40) { ui->gripper->setValue(50);}
-}
-
 void MainWindow::on_platformR_sliderMoved(int position)
 {
     if (position>50) robot->moveRight(position);
     else if (position<50) robot->moveLeft(position);
 }
 
-void MainWindow::on_platformF_sliderMoved(int position)
+
+void MainWindow::on_gripper_valueChanged(int value)
 {
 
-    if (position>50) robot->moveForward(position);
-    else if (position<50) robot->moveBack(position);
+    robot->gripper(value);
+}
+
+void MainWindow::on_flipper_valueChanged(int value)
+{
+
+    robot->flippers(value);
+}
+
+void MainWindow::on_acceptForms_clicked()
+{
+    form->validateValues();
+    robot->moveForward(form->platformF);
+    robot->moveLeft(form->platformR);
+    robot->moveWaist(form->shoulder);
+    robot->turnElbowAndNeck(form->elbow);
+    robot->turnNeck(form->neck);
+    robot->turnWaist(form->waist);
 }
 
 
-void MainWindow::on_gripper_valueChanged(int position)
+void MainWindow::on_platformF_sliderReleased()
 {
-    if (position<40){ robot->gripper(-1);
-        ui->gripper->setValue(0);}
-    else if (position>60) {robot->gripper(1); ui->gripper->setValue(100);}
-    else if (position<60 && position>40) {robot->gripper(0); ui->gripper->setValue(50);}
+
+}
+
+void MainWindow::on_platformF_rangeChanged(int min, int max)
+{
+    qDebug()<<min<<max;
+}
+
+void MainWindow::on_platformF_sliderMoved(int position)
+{
+
+}
+
+void MainWindow::on_platformF_valueChanged(int value)
+{
+    if(value%10==0) qDebug()<<"AWWDAS";
 }

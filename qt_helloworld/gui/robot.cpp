@@ -1,6 +1,6 @@
 #include "robot.h"
 #include <robotcontroller.h>
-
+#include <QDebug>
 Robot::Robot()
 {
     controller = new RobotController();
@@ -44,6 +44,7 @@ Robot::Robot()
         controller->elbowNeck(getRealSpeed(speed));
     }
     void Robot::turnNeck(int speed){
+        qDebug()<<"SEEEND";
         controller->neck(getRealSpeed(speed));
     }
 

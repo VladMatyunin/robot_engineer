@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     robotcontroller.cpp \
     robot.cpp \
     robotconfiguration.cpp \
-    robotsettings.cpp
+    robotsettings.cpp \
+    myqslider.cpp
 
 HEADERS  += mainwindow.h \
     myudpclient.h\
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     robot.h \
     robotconfiguration.h \
     robotsettings.h \
-    robotPackets.h
+    robotPackets.h \
+    myqslider.h
 
 FORMS    += mainwindow.ui \
     robotsettings.ui
