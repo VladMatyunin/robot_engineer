@@ -5,18 +5,19 @@
 #include <QObject>
 #include <QTimer>
 #include "robotPackets.h"
+#include "robot.h"
 class UDPClient;
 class RobotController : public QObject
 {
     Q_OBJECT
-
+public:Robot *robot;
 UDPClient *client;
 void startTimerTask();
 void sendLivePackets();
 public:
     RemoteControlPacket *packet;
     QTimer *timer;
-    RobotController();
+    RobotController(Robot *robot);
     ~RobotController();
     void turnLight();
 

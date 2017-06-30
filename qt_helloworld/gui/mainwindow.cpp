@@ -5,6 +5,7 @@
 #include "QDebug"
 #include "robotsettings.h"
 #include <QKeyEvent>
+#include <robotPackets.h>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     robot = new Robot();
     client = new UDPClient(robot->controller);
+    connect(robot,SIGNAL(telemetryChanged(TelemetryPacket*)),this,SLOT(setTelemetry(TelemetryPacket*)));
     qApp->installEventFilter(this);
 }
 MainWindow::JointForm::JointForm(MainWindow *ui){
@@ -155,4 +157,7 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
     if(value%10==0){
         robot->moveWaist(value);
     }
+}
+void MainWindow::setTelemetry(TelemetryPacket *packet){
+    qDebug()<<"GEET";
 }

@@ -21,6 +21,7 @@ struct MOTOR_DATA{
     int16_t AMPS_COMMAND;
     u_int8_t FAULT_DETECTED;
     u_int16_t FAULTS_COUNTER;
+
 };
 struct TelemetryPacket{
     u_int8_t FRAME_TYPE_ID = 2;
@@ -28,6 +29,7 @@ struct TelemetryPacket{
     u_int8_t NUMBER_OF_MOTORS;
     MOTOR_DATA M_DATA[10];
     int8_t BLANK_BYTES[25];
+
 };
 
 struct VideoFramePacket{

@@ -1,9 +1,12 @@
 #ifndef ROBOT_H
 #define ROBOT_H
-#include <robotcontroller.h>
 #include <robotconfiguration.h>
-class Robot
+#include <QObject>
+class RobotController;
+struct TelemetryPacket;
+class Robot: public QObject
 {
+    Q_OBJECT
 public:
     RobotController *controller;
     ~Robot();
@@ -32,6 +35,8 @@ public:
 
 
     RobotConfiguration* getConfiguration();
+signals:
+    void telemetryChanged(TelemetryPacket *packet);
 
 private:
     RobotConfiguration *configuration;

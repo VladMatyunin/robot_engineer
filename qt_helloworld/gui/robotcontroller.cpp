@@ -7,8 +7,10 @@
 #include <QTimer>
 #include "robotPackets.h"
 #include "QDebug"
-RobotController::RobotController():QObject()
+#include "robot.h"
+RobotController::RobotController(Robot *r):QObject()
 {
+    robot = r;
     client = new UDPClient(this);
     timer = new QTimer();
     packet = getBasicPacket();
@@ -18,6 +20,7 @@ RobotController::~RobotController(){
     delete client;
     delete timer;
     delete packet;
+    delete robot;
 }
 
 void RobotController::turnLight(){

@@ -20,13 +20,13 @@ UDPClient::UDPClient(RobotController *controller):QObject()
     this->controller = controller;
     timer = new QTimer();
 }
-UDPClient::UDPClient():QObject()
-{
-    m_pudp = new QUdpSocket(this);
-    robotAddress = new QHostAddress("10.42.0.1");
-    timer = new QTimer();
-    this->controller = new RobotController();
-}
+//UDPClient::UDPClient():QObject()
+//{
+//    m_pudp = new QUdpSocket(this);
+//    robotAddress = new QHostAddress("10.42.0.1");
+//    timer = new QTimer();
+//    this->controller = new RobotController();
+//}
 
 
 void UDPClient::listenRobot(){
@@ -39,19 +39,27 @@ void UDPClient::listenRobot(){
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
 
     do {
-        char* buffer = new char[1];
-        in.readRawData(buffer,1);
+        char* buffer = new char[275];
+        in.readRawData(buffer,275);
         if(buffer[0]==2){
-            char* packet = new char[275];
-            in>>packet;
-            TelemetryPacket *telPacket = reinterpret_cast<TelemetryPacket*>(packet);
-            qDebug()<<"GOT TELEMETRY";
-            delete packet, telPacket;
-        }
-        delete buffer;
+//            char* packet = new char[275];
+//            in.readRawData(packet,275);
+            TelemetryPacket *telPacket = new TelemetryPacket();
+            telPacket = (TelemetryPacket*)(buffer);
+            emit controller->robot->telemetryChanged(telPacket);
+//            for (int i = 0; i < 10; i++){
+//                qDebug()<<"Joint"<<i<<(telPacket->M_DATA[i].SPEED_COMMAND);
+//            }
+//            qDebug()<<"=========";
+            delete[] buffer;
+            //delete  telPacket;
+            return;
+        }else{
+        delete[] buffer;
+            return;}
     }while (!in.atEnd());
 
-    qDebug()<<"Got info from robot";
+ //   qDebug()<<"Got info from robot";
 }
 
 

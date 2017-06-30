@@ -1,9 +1,11 @@
 #include "robot.h"
 #include <robotcontroller.h>
 #include <QDebug>
-Robot::Robot()
+#include <robotPackets.h>
+#include <QObject>
+Robot::Robot():QObject()
 {
-    controller = new RobotController();
+    controller = new RobotController(this);
     configuration = new RobotConfiguration(5000,16000,false);
 }
 
@@ -83,4 +85,5 @@ Robot::~Robot(){
     delete configuration;
     delete controller;
 }
+
 

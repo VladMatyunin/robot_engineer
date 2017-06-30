@@ -25,7 +25,7 @@ private:
 
 public:
     UDPClient(RobotController *controller);
-    UDPClient();
+    //UDPClient();
     void putData(QDataStream &out, const RemoteControlPacket &packet);
     void processData(bool);
     void sendPacket(RemoteControlPacket packet);

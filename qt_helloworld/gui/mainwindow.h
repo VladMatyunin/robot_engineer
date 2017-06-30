@@ -6,6 +6,7 @@
 #include "robot.h"
 #include "robotsettings.h"
 #include <QEvent>
+#include <robotPackets.h>
 namespace Ui {
 class MainWindow;
 }
@@ -53,6 +54,8 @@ private slots:
     void on_neckSlider_valueChanged(int value);
 
     void on_waistUpDown_valueChanged(int value);
+   public slots:
+    void setTelemetry(TelemetryPacket *packet);
 
 private:
 
