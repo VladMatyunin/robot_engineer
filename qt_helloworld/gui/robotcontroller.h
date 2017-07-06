@@ -10,10 +10,14 @@ class UDPClient;
 class RobotController : public QObject
 {
     Q_OBJECT
-public:Robot *robot;
-UDPClient *client;
+public: Robot *robot;
+public: UDPClient *client;
 void startTimerTask();
 void sendLivePackets();
+
+signals:
+    void connectedToRobot();
+
 public:
     RemoteControlPacket *packet;
     QTimer *timer;
@@ -42,6 +46,7 @@ public:
     void stopFlippers();
 
     void connectClient();
+
 
 };
 

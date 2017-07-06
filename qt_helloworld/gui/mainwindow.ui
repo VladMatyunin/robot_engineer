@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -85,6 +85,9 @@
              <string>Flippers</string>
             </property>
             <widget class="QDial" name="flipper">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>70</x>
@@ -156,6 +159,9 @@
              <string>Gripper</string>
             </property>
             <widget class="QDial" name="gripper">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>50</x>
@@ -251,6 +257,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="neckLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -261,6 +270,9 @@
              </item>
              <item row="1" column="0" colspan="2">
               <widget class="MyQSlider" name="neckSlider">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="maximum">
                 <number>100</number>
                </property>
@@ -290,6 +302,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QLineEdit" name="elbowLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -300,6 +315,9 @@
              </item>
              <item row="3" column="0" colspan="2">
               <widget class="MyQSlider" name="elbowSlider">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="maximum">
                 <number>100</number>
                </property>
@@ -329,6 +347,9 @@
              </item>
              <item row="4" column="1">
               <widget class="QLineEdit" name="shoulderLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -339,6 +360,9 @@
              </item>
              <item row="5" column="0" colspan="2">
               <widget class="MyQSlider" name="waistUpDown">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="mouseTracking">
                 <bool>false</bool>
                </property>
@@ -377,6 +401,9 @@
              </item>
              <item row="6" column="1">
               <widget class="QLineEdit" name="waistLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -387,6 +414,9 @@
              </item>
              <item row="7" column="0" colspan="2">
               <widget class="MyQSlider" name="waistLeftRight">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="maximum">
                 <number>100</number>
                </property>
@@ -432,6 +462,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="platformForwardLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -449,6 +482,9 @@
              </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="platformRLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>0</string>
                </property>
@@ -459,6 +495,9 @@
              </item>
              <item row="3" column="0" colspan="2">
               <widget class="MyQSlider" name="platformR">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="mouseTracking">
                 <bool>true</bool>
                </property>
@@ -513,6 +552,9 @@
            </item>
            <item>
             <widget class="MyQSlider" name="platformF">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>

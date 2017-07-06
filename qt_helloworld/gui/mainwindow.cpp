@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QStandardItem>
 #include <robotPackets.h>
+#include <robotcontroller.h>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
             widget->setItem(i,1,new QTableWidgetItem());
         }
     QStringList *list  = new QStringList();
-
+    RobotController *c = robot->controller;
+    connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
     *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"<<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
 
     widget->setVerticalHeaderLabels(*list);
@@ -46,6 +48,24 @@ int MainWindow::JointForm::validateValue(QString value){
     if(value.isNull()|| value.isEmpty())
         return 0;
     return value.toInt();
+}
+
+void MainWindow::JointForm::setEnabledForm(bool v){
+    window->ui->waistUpDown->setEnabled(v);
+    window->ui->elbowSlider->setEnabled(v);
+    window->ui->waistLeftRight->setEnabled(v);
+    window->ui->gripper->setEnabled(v);
+    window->ui->flipper->setEnabled(v);
+    window->ui->neckSlider->setEnabled(v);
+    window->ui->platformF->setEnabled(v);
+    window->ui->platformR->setEnabled(v);
+
+    window->ui->elbowLineEdit->setEnabled(v);
+    window->ui->neckLineEdit->setEnabled(v);
+    window->ui->shoulderLineEdit->setEnabled(v);
+    window->ui->waistLineEdit->setEnabled(v);
+    window->ui->platformForwardLineEdit->setEnabled(v);
+    window->ui->platformRLineEdit->setEnabled(v);
 }
 
 
@@ -188,4 +208,11 @@ void MainWindow::setTelemetry(TelemetryPacket &packet){
     }
     delete &packet;
     qDebug()<<"GEET";
+}
+void MainWindow::connectedToRobotUI(){
+    setEnabledAllControls(true);
+    qDebug()<<"CONNECTED";
+}
+void MainWindow::setEnabledAllControls(bool v){
+    form->setEnabledForm(v);
 }

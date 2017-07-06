@@ -30,6 +30,11 @@ UDPClient::UDPClient(RobotController *controller):QObject()
 
 
 void UDPClient::listenRobot(){
+    if(!isConntected){
+        isConntected = true;
+        emit controller->connectedToRobot();
+
+    }
     QByteArray baDatagram;
     do {
         baDatagram.resize(m_pudp->pendingDatagramSize());

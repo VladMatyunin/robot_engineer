@@ -56,6 +56,7 @@ private slots:
     void on_waistUpDown_valueChanged(int value);
    public slots:
     void setTelemetry(TelemetryPacket &packet);
+    void connectedToRobotUI();
 
 private:
 
@@ -67,6 +68,9 @@ private:
     int currentGripper = 0;
     int currentFlippers = 0;
     std::vector<std::vector<QTableWidgetItem> > telemetryViewItems;
+    
+    void setEnabledAllControls(bool);
+    
 
 
     class JointForm{
@@ -81,6 +85,7 @@ private:
 
         public:
             void validateValues();
+            void setEnabledForm(bool v);
 
             JointForm(MainWindow *window);
             ~JointForm();
@@ -88,6 +93,7 @@ private:
             int validateValue(QString value);
         };
 };
+
 
 
 #endif // MAINWINDOW_H
