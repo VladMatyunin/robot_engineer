@@ -13,7 +13,7 @@
 //    ui->platform_forward_settings->setValue(conf->platformForwardSpeed);
 //    ui->platform_settings_rotate->setValue(conf->platformRotateSpeed);
 //}
-RobotSettings::RobotSettings(QWidget *parent) :
+RobotSettings::RobotSettings( RobotConfiguration *conf,QWidget *parent) :
     QTabWidget(parent),
     ui(new Ui::RobotSettings)
 {
@@ -25,4 +25,7 @@ RobotSettings::RobotSettings(QWidget *parent) :
 RobotSettings::~RobotSettings()
 {
     delete ui;
+}
+void RobotSettings::closeEvent(QCloseEvent *e){
+    setVisible(false);
 }

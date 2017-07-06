@@ -32,13 +32,15 @@ public:
     void stopFlippers();
     void stopAll();
 
+    void connectToEngineer();
+
 
 
     RobotConfiguration* getConfiguration();
 signals:
-    void telemetryChanged(TelemetryPacket *packet);
+    void telemetryChanged(TelemetryPacket &packet);
 
-private:
+public:
     RobotConfiguration *configuration;
     int getRealSpeed(int uiSpeed);
 };

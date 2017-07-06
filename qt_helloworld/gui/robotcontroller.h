@@ -41,6 +41,8 @@ public:
     void stopGripper();
     void stopFlippers();
 
+    void connectClient();
+
 };
 
 #endif // ROBOTCONTROLLER_H

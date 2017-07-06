@@ -2,11 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <myudpclient.h>
 #include "robot.h"
 #include "robotsettings.h"
 #include <QEvent>
-#include <robotPackets.h>
+#include <vector>
+#include <QTableWidget>
 namespace Ui {
 class MainWindow;
 }
@@ -55,18 +55,20 @@ private slots:
 
     void on_waistUpDown_valueChanged(int value);
    public slots:
-    void setTelemetry(TelemetryPacket *packet);
+    void setTelemetry(TelemetryPacket &packet);
 
 private:
 
     Ui::MainWindow *ui;
     bool isLight;
-    UDPClient *client;
     Robot *robot;
     RobotSettings *settings;
     JointForm *form;
     int currentGripper = 0;
     int currentFlippers = 0;
+    std::vector<std::vector<QTableWidgetItem> > telemetryViewItems;
+
+
     class JointForm{
     public:
             int neck = 0;

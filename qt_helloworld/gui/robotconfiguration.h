@@ -6,6 +6,7 @@ class RobotConfiguration
 
 public:
     RobotConfiguration();
+    ~RobotConfiguration();
     RobotConfiguration(int platformForwardSpeed=5000, int platformRotateSpeed = 5000, bool light = false);
     int platformForwardSpeed;
     int platformRotateSpeed;

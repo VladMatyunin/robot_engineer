@@ -8,3 +8,4 @@ RobotConfiguration::RobotConfiguration(int platformForwardSpeed, int platformRot
     this->platformRotateSpeed = platformRotateSpeed;
     this->lightValue = light;
 }
+RobotConfiguration::~RobotConfiguration(){}

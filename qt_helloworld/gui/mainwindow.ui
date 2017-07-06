@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>894</width>
+    <width>1063</width>
     <height>794</height>
    </rect>
   </property>
@@ -19,12 +19,12 @@
      <rect>
       <x>10</x>
       <y>-10</y>
-      <width>831</width>
+      <width>601</width>
       <height>731</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -70,8 +70,150 @@
          <item>
           <widget class="QGroupBox" name="groupBox_3">
            <property name="title">
-            <string>Robot view</string>
+            <string>tools</string>
            </property>
+           <widget class="QGroupBox" name="groupBox_6">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>30</y>
+              <width>181</width>
+              <height>101</height>
+             </rect>
+            </property>
+            <property name="title">
+             <string>Flippers</string>
+            </property>
+            <widget class="QDial" name="flipper">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>20</y>
+               <width>50</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>1</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>60</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>down</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_2">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>0</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>stop</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_3">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>60</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>up</string>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_5">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>150</y>
+              <width>161</width>
+              <height>131</height>
+             </rect>
+            </property>
+            <property name="title">
+             <string>Gripper</string>
+            </property>
+            <widget class="QDial" name="gripper">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>50</y>
+               <width>50</width>
+               <height>64</height>
+              </rect>
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>1</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_5">
+             <property name="geometry">
+              <rect>
+               <x>60</x>
+               <y>30</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>stop</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_6">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>80</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>close</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_7">
+             <property name="geometry">
+              <rect>
+               <x>120</x>
+               <y>80</y>
+               <width>67</width>
+               <height>17</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>open</string>
+             </property>
+            </widget>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -109,6 +251,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="neckLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -145,6 +290,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QLineEdit" name="elbowLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -181,6 +329,9 @@
              </item>
              <item row="4" column="1">
               <widget class="QLineEdit" name="shoulderLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -226,6 +377,9 @@
              </item>
              <item row="6" column="1">
               <widget class="QLineEdit" name="waistLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -278,6 +432,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="platformForwardLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -292,6 +449,9 @@
              </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="platformRLineEdit">
+               <property name="text">
+                <string>0</string>
+               </property>
                <property name="maxLength">
                 <number>5</number>
                </property>
@@ -335,6 +495,20 @@
                </property>
               </spacer>
              </item>
+             <item row="4" column="0">
+              <widget class="QPushButton" name="acceptForms">
+               <property name="text">
+                <string>Accept</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QPushButton" name="stopAll">
+               <property name="text">
+                <string>StopAll</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -370,187 +544,6 @@
         </widget>
        </item>
       </layout>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="geometry">
-       <rect>
-        <x>600</x>
-        <y>10</y>
-        <width>188</width>
-        <height>315</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>tools</string>
-      </property>
-      <widget class="QGroupBox" name="groupBox_6">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>30</y>
-         <width>181</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Flippers</string>
-       </property>
-       <widget class="QDial" name="flipper">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>20</y>
-          <width>50</width>
-          <height>64</height>
-         </rect>
-        </property>
-        <property name="minimum">
-         <number>-1</number>
-        </property>
-        <property name="maximum">
-         <number>1</number>
-        </property>
-        <property name="pageStep">
-         <number>1</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>60</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>down</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>0</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>stop</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>130</x>
-          <y>60</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>up</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>160</y>
-         <width>161</width>
-         <height>131</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Gripper</string>
-       </property>
-       <widget class="QDial" name="gripper">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>50</y>
-          <width>50</width>
-          <height>64</height>
-         </rect>
-        </property>
-        <property name="minimum">
-         <number>-1</number>
-        </property>
-        <property name="maximum">
-         <number>1</number>
-        </property>
-        <property name="pageStep">
-         <number>1</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_5">
-        <property name="geometry">
-         <rect>
-          <x>60</x>
-          <y>30</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>stop</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_6">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>80</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>close</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_7">
-        <property name="geometry">
-         <rect>
-          <x>120</x>
-          <y>80</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>open</string>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QPushButton" name="acceptForms">
-      <property name="geometry">
-       <rect>
-        <x>650</x>
-        <y>590</y>
-        <width>99</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Accept</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="stopAll">
-      <property name="geometry">
-       <rect>
-        <x>650</x>
-        <y>640</y>
-        <width>99</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>StopAll</string>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -667,13 +660,49 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QTableWidget" name="telemetryView">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>20</y>
+      <width>391</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>10</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <column>
+     <property name="text">
+      <string>speed</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>position</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>894</width>
+     <width>1063</width>
      <height>25</height>
     </rect>
    </property>

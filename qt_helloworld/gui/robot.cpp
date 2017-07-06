@@ -82,8 +82,12 @@ void Robot::stopAll(){
 }
 
 Robot::~Robot(){
-    delete configuration;
+
     delete controller;
+delete configuration;
+}
+void Robot::connectToEngineer(){
+    controller->connectClient();
 }
 
 

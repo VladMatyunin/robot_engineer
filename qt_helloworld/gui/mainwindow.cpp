@@ -1,10 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "myudpclient.h"
 #include "robot.h"
 #include "QDebug"
 #include "robotsettings.h"
 #include <QKeyEvent>
+#include <QStandardItem>
 #include <robotPackets.h>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,10 +13,22 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     robot = new Robot();
-    client = new UDPClient(robot->controller);
-    connect(robot,SIGNAL(telemetryChanged(TelemetryPacket*)),this,SLOT(setTelemetry(TelemetryPacket*)));
+    settings = new RobotSettings(robot->configuration, new QWidget);
+    connect(robot,SIGNAL(telemetryChanged(TelemetryPacket&)),this,SLOT(setTelemetry(TelemetryPacket&)));
     qApp->installEventFilter(this);
-}
+    QTableWidget *widget = ui->telemetryView;
+    for(int i = 0; i < 10; ++i){
+            widget->setItem(i,0,new QTableWidgetItem());
+            widget->setItem(i,1,new QTableWidgetItem());
+        }
+    QStringList *list  = new QStringList();
+
+    *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"<<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
+
+    widget->setVerticalHeaderLabels(*list);
+
+    }
+
 MainWindow::JointForm::JointForm(MainWindow *ui){
     this->window = ui;
 }
@@ -41,7 +53,7 @@ int MainWindow::JointForm::validateValue(QString value){
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete client;
+    delete robot, settings;
 }
 
 void MainWindow::on_lightToggle_clicked()
@@ -52,7 +64,7 @@ void MainWindow::on_lightToggle_clicked()
 
 void MainWindow::on_connectButton_clicked()
 {
-    client->connectToRobot();
+    robot->connectToEngineer();
 }
 
 
@@ -78,6 +90,8 @@ void MainWindow::on_acceptForms_clicked()
     robot->turnElbowAndNeck(form->elbow);
     robot->turnNeck(form->neck);
     robot->turnWaist(form->waist);
+    robot->moveD(form->platformF);
+    robot->moveR(form->platformR);
 }
 
 
@@ -91,7 +105,7 @@ void MainWindow::on_platformF_valueChanged(int value)
 
 void MainWindow::on_settings_clicked()
 {
-
+    settings->show();
 }
 
 void MainWindow::on_platformR_valueChanged(int value)
@@ -158,6 +172,20 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
         robot->moveWaist(value);
     }
 }
-void MainWindow::setTelemetry(TelemetryPacket *packet){
+void MainWindow::setTelemetry(TelemetryPacket &packet){
+
+    QTableWidget *widget = ui->telemetryView;
+    for(int i = 0; i < 10; ++i){
+        QTableWidgetItem *itemSpeed = widget->item(i,0);
+        QTableWidgetItem *itemPosition = widget->item(i,1);
+        int robotSpeed = packet.M_DATA[i].SPEED;
+        int robotPosition = packet.M_DATA[i].POSITION;
+          itemSpeed->setText(QString::number(robotSpeed));
+          itemPosition->setText(QString::number(robotPosition));
+        qDebug()<<robotSpeed<<"lll"<<robotPosition;
+        ui->telemetryView->item(i,0)->setText(QString::number(packet.M_DATA[i].SPEED));
+        ui->telemetryView->item(i,1)->setText(QString::number(packet.M_DATA[i].POSITION));
+    }
+    delete &packet;
     qDebug()<<"GEET";
 }

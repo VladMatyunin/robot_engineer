@@ -41,17 +41,18 @@ void UDPClient::listenRobot(){
     do {
         char* buffer = new char[275];
         in.readRawData(buffer,275);
+
         if(buffer[0]==2){
 //            char* packet = new char[275];
 //            in.readRawData(packet,275);
             TelemetryPacket *telPacket = new TelemetryPacket();
             telPacket = (TelemetryPacket*)(buffer);
-            emit controller->robot->telemetryChanged(telPacket);
+            emit controller->robot->telemetryChanged(*telPacket);
 //            for (int i = 0; i < 10; i++){
 //                qDebug()<<"Joint"<<i<<(telPacket->M_DATA[i].SPEED_COMMAND);
 //            }
 //            qDebug()<<"=========";
-            delete[] buffer;
+            //delete[] buffer;
             //delete  telPacket;
             return;
         }else{

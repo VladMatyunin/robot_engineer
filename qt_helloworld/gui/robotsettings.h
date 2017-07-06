@@ -12,9 +12,10 @@ class RobotSettings : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit RobotSettings(QWidget *parent = 0);
+    explicit RobotSettings( RobotConfiguration *conf=NULL,QWidget *parent = 0);
     //explicit RobotSettings(QWidget *parent = 0, RobotConfiguration *conf);
     ~RobotSettings();
+    void closeEvent(QCloseEvent *e);
 
 private:
     RobotConfiguration *conf;

@@ -4,7 +4,6 @@
 #include <QStringBuilder>
 #include <QString>
 #include "myudpclient.h"
-#include <QTimer>
 #include "robotPackets.h"
 #include "QDebug"
 #include "robot.h"
@@ -12,15 +11,13 @@ RobotController::RobotController(Robot *r):QObject()
 {
     robot = r;
     client = new UDPClient(this);
-    timer = new QTimer();
+  //  QThread *clientThread = new QThread;
+//    client->moveToThread(clientThread);
     packet = getBasicPacket();
 }
 
 RobotController::~RobotController(){
-    delete client;
-    delete timer;
     delete packet;
-    delete robot;
 }
 
 void RobotController::turnLight(){
@@ -123,4 +120,8 @@ void RobotController::stopFlippers(){
 void RobotController::stopGripper(){
     packet->BUTTON[0] = 0;
     packet->BUTTON[3] = 0;
+}
+
+void RobotController::connectClient(){
+    client->connectToRobot();
 }
