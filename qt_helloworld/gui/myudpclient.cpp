@@ -117,6 +117,7 @@ void UDPClient::startTimerTask(){
 
 void UDPClient::sendLivePackets(){
         RemoteControlPacket *packet = controller->packet;
+        qDebug()<<packet->AXIS[1];
         sendPacket(*packet);
 }
 

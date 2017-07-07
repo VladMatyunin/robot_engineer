@@ -264,7 +264,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -309,7 +309,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -354,7 +354,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -408,7 +408,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -469,7 +469,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -489,7 +489,7 @@
                 <string>0</string>
                </property>
                <property name="maxLength">
-                <number>5</number>
+                <number>6</number>
                </property>
               </widget>
              </item>

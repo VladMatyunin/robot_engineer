@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    form = new JointForm;
     robot = new Robot();
     settings = new RobotSettings(robot->configuration, new QWidget);
     connect(robot,SIGNAL(telemetryChanged(TelemetryPacket&)),this,SLOT(setTelemetry(TelemetryPacket&)));
@@ -37,12 +38,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 void MainWindow::validateValues(){
-    form.elbow = validateValue(ui->elbowLineEdit->text());
-    form.neck = validateValue(ui->neckLineEdit->text());
-    form.shoulder = validateValue(ui->shoulderLineEdit->text());
-    form.waist = validateValue(ui->waistLineEdit->text());
-    form.platformF = validateValue(ui->platformForwardLineEdit->text());
-    form.platformR = validateValue(ui->platformRLineEdit->text());
+    form->elbow = validateValue(ui->elbowLineEdit->text());
+    form->neck = validateValue(ui->neckLineEdit->text());
+    form->shoulder = validateValue(ui->shoulderLineEdit->text());
+    form->waist = validateValue(ui->waistLineEdit->text());
+    form->platformF = validateValue(ui->platformForwardLineEdit->text());
+    form->platformR = validateValue(ui->platformRLineEdit->text());
 
 }
 int MainWindow::validateValue(QString value){
@@ -87,7 +88,6 @@ void MainWindow::on_connectButton_clicked()
 
 void MainWindow::on_gripper_valueChanged(int value)
 {
-    qDebug()<<value;
     robot->gripper(value);
 }
 
@@ -99,15 +99,28 @@ void MainWindow::on_flipper_valueChanged(int value)
 
 void MainWindow::on_acceptForms_clicked()
 {
-
     validateValues();
-    robot->moveD(form.platformF);
-    robot->moveR(form.platformR);
-    robot->moveWaist(form.shoulder);
-    robot->turnElbowAndNeck(form.elbow);
-    robot->turnNeck(form.neck);
-    robot->turnWaist(form.waist);
-}
+    if(form->platformF>0){
+        robot->moveD(form->platformF);
+        if(form->platformR>0)
+            robot->moveR(form->platformR);
+    }
+    else{
+        if(form->platformR>0)
+            robot->moveR(form->platformR);
+        else{
+            robot->moveWaist(form->shoulder);
+            if (form->waist>0)
+               robot->turnWaist(form->waist);
+        }
+    }
+
+
+    if(form->elbow>0)
+        robot->turnElbowAndNeck(form->elbow);
+    else
+        robot->turnNeck(form->neck);
+    }
 
 
 
@@ -115,7 +128,7 @@ void MainWindow::on_acceptForms_clicked()
 void MainWindow::on_platformF_valueChanged(int value)
 {
     if (value%10==0)
-        robot->moveD(value);
+        robot->moveD(getRealSpeed(value));
 }
 
 void MainWindow::on_settings_clicked()
@@ -126,13 +139,14 @@ void MainWindow::on_settings_clicked()
 void MainWindow::on_platformR_valueChanged(int value)
 {
     if (value%10==0)
-        robot->moveR(value);
+        robot->moveR(getRealSpeed(value));
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event){
     if (event->type()==QEvent::KeyPress) {
             QKeyEvent* key = static_cast<QKeyEvent*>(event);
             if ( (key->key()==Qt::Key_Space)) {
+                qDebug()<<"STTTOOOOP";
                 on_stopAll_clicked();
             } else {
                 return QObject::eventFilter(obj, event);
@@ -148,6 +162,7 @@ void MainWindow::on_stopAll_clicked()
 {
     robot->stopAll();
     setSlidersToStart();
+    setInputToZero();
 }
 void MainWindow::setSlidersToStart(){
     ui->waistUpDown->setValue(50);
@@ -159,32 +174,40 @@ void MainWindow::setSlidersToStart(){
     ui->platformF->setValue(50);
     ui->platformR->setValue(50);
 }
+void MainWindow::setInputToZero(){
+    ui->elbowLineEdit->setText("0");
+    ui->neckLineEdit->setText("0");
+    ui->shoulderLineEdit->setText("0");
+    ui->waistLineEdit->setText("0");
+    ui->platformForwardLineEdit->setText("0");
+    ui->platformRLineEdit->setText("0");
+}
 
 void MainWindow::on_waistLeftRight_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnWaist(value);
+        robot->turnWaist(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_elbowSlider_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnElbowAndNeck(value);
+        robot->turnElbowAndNeck(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_neckSlider_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnNeck(value);
+        robot->turnNeck(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_waistUpDown_valueChanged(int value)
 {
     if(value%10==0){
-        robot->moveWaist(value);
+        robot->moveWaist(getRealSpeed(value));
     }
 }
 void MainWindow::setTelemetry(TelemetryPacket &packet){
@@ -197,12 +220,10 @@ void MainWindow::setTelemetry(TelemetryPacket &packet){
         int robotPosition = packet.M_DATA[i].POSITION;
         itemSpeed->setText(QString::number(robotSpeed));
         itemPosition->setText(QString::number(robotPosition));
-        qDebug()<<robotSpeed<<"lll"<<robotPosition;
         ui->telemetryView->item(i,0)->setText(QString::number(packet.M_DATA[i].SPEED));
         ui->telemetryView->item(i,1)->setText(QString::number(packet.M_DATA[i].POSITION));
     }
     delete &packet;
-    qDebug()<<"GEET";
 }
 void MainWindow::connectedToRobotUI(){
     ui->connectButton->setText("Disconnect");
@@ -227,4 +248,12 @@ void MainWindow::setEnabledAllControls(bool v){
     ui->waistLineEdit->setEnabled(v);
     ui->platformForwardLineEdit->setEnabled(v);
     ui->platformRLineEdit->setEnabled(v);
+}
+
+
+int MainWindow::getRealSpeed(int speed){
+    int realSpeed = 0;
+    realSpeed = (speed-50)*200;
+    qDebug()<<realSpeed;
+    return realSpeed;
 }

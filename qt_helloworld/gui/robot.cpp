@@ -11,11 +11,11 @@ Robot::Robot():QObject()
 
     void Robot::moveD(int speed){
         //minus because forward is <(lt)0, back is >(gt)0
-        controller->movePlatformDirect(-getRealSpeed(speed));
+        controller->movePlatformDirect(-speed);
     }
 
     void Robot::moveR(int speed){
-        controller->movePlatformRotate(getRealSpeed(speed));
+        controller->movePlatformRotate(speed);
     }
     void Robot::turnLight(){
         controller->turnLight();
@@ -40,24 +40,18 @@ Robot::Robot():QObject()
         return configuration;
     }
     void Robot::turnElbowAndNeck(int speed){
-        controller->elbowNeck(-getRealSpeed(speed));
+        controller->elbowNeck(-speed);
     }
     void Robot::turnNeck(int speed){
-        controller->neck(-getRealSpeed(speed));
+        controller->neck(-speed);
     }
 
-    int Robot::getRealSpeed(int speed){
 
-        int realSpeed = 0;
-        realSpeed = (speed-50)*200;
-        qDebug()<<realSpeed;
-        return realSpeed;
-    }
     void Robot::turnWaist(int speed){
-        controller->waist(getRealSpeed(speed));
+        controller->waist(speed);
     }
     void Robot::moveWaist(int speed){
-        controller->waistUpDown(getRealSpeed(speed));
+        controller->waistUpDown(speed);
     }
 
     void Robot::gripper(int direction){

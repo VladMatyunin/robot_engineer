@@ -69,8 +69,10 @@ private slots:
     void connectedToRobotUI();
 
 private:
+    void setInputToZero();
+    int getRealSpeed(int speed);
     int validateValue(QString value);
-    JointForm form;
+    JointForm *form;
     void validateValues();
     QProgressDialog *dialog;
     Ui::MainWindow *ui;
