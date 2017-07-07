@@ -7,6 +7,7 @@
 #include <QStandardItem>
 #include <robotPackets.h>
 #include <robotcontroller.h>
+#include <QProgressDialog>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,61 +18,46 @@ MainWindow::MainWindow(QWidget *parent) :
     settings = new RobotSettings(robot->configuration, new QWidget);
     connect(robot,SIGNAL(telemetryChanged(TelemetryPacket&)),this,SLOT(setTelemetry(TelemetryPacket&)));
     qApp->installEventFilter(this);
+    dialog = new QProgressDialog("Connecting to robot...", "Cancel", 0, 0);
+    dialog->setWindowModality(Qt::WindowModal);
     QTableWidget *widget = ui->telemetryView;
     for(int i = 0; i < 10; ++i){
-            widget->setItem(i,0,new QTableWidgetItem());
-            widget->setItem(i,1,new QTableWidgetItem());
-        }
+        widget->setItem(i,0,new QTableWidgetItem());
+        widget->setItem(i,1,new QTableWidgetItem());
+    }
     QStringList *list  = new QStringList();
     RobotController *c = robot->controller;
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
-    *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"<<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
-
+    *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"
+        <<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
     widget->setVerticalHeaderLabels(*list);
 
     }
 
-MainWindow::JointForm::JointForm(MainWindow *ui){
-    this->window = ui;
-}
 
-void MainWindow::JointForm::validateValues(){
-    this->elbow = validateValue(window->ui->elbowLineEdit->text());
-    this->neck = validateValue(window->ui->neckLineEdit->text());
-    this->shoulder = validateValue(window->ui->shoulderLineEdit->text());
-    this->waist = validateValue(window->ui->waistLineEdit->text());
-    this->platformF = validateValue(window->ui->platformForwardLineEdit->text());
-    this->platformR = validateValue(window->ui->platformRLineEdit->text());
+
+void MainWindow::validateValues(){
+    form.elbow = validateValue(ui->elbowLineEdit->text());
+    form.neck = validateValue(ui->neckLineEdit->text());
+    form.shoulder = validateValue(ui->shoulderLineEdit->text());
+    form.waist = validateValue(ui->waistLineEdit->text());
+    form.platformF = validateValue(ui->platformForwardLineEdit->text());
+    form.platformR = validateValue(ui->platformRLineEdit->text());
 
 }
-int MainWindow::JointForm::validateValue(QString value){
+int MainWindow::validateValue(QString value){
     if(value.isNull()|| value.isEmpty())
         return 0;
     return value.toInt();
 }
 
-void MainWindow::JointForm::setEnabledForm(bool v){
-    window->ui->waistUpDown->setEnabled(v);
-    window->ui->elbowSlider->setEnabled(v);
-    window->ui->waistLeftRight->setEnabled(v);
-    window->ui->gripper->setEnabled(v);
-    window->ui->flipper->setEnabled(v);
-    window->ui->neckSlider->setEnabled(v);
-    window->ui->platformF->setEnabled(v);
-    window->ui->platformR->setEnabled(v);
 
-    window->ui->elbowLineEdit->setEnabled(v);
-    window->ui->neckLineEdit->setEnabled(v);
-    window->ui->shoulderLineEdit->setEnabled(v);
-    window->ui->waistLineEdit->setEnabled(v);
-    window->ui->platformForwardLineEdit->setEnabled(v);
-    window->ui->platformRLineEdit->setEnabled(v);
-}
 
 
 
 MainWindow::~MainWindow()
 {
+    delete dialog, form;
     delete ui;
     delete robot, settings;
 }
@@ -84,7 +70,17 @@ void MainWindow::on_lightToggle_clicked()
 
 void MainWindow::on_connectButton_clicked()
 {
+    if (!robot->isConnected){
     robot->connectToEngineer();
+
+    dialog->exec();
+    }
+    else{
+        robot->isConnected=false;
+        setEnabledAllControls(false);
+        robot->controller->disconnectClient();
+        ui->connectButton->setText("Connect");
+    }
 }
 
 
@@ -103,15 +99,14 @@ void MainWindow::on_flipper_valueChanged(int value)
 
 void MainWindow::on_acceptForms_clicked()
 {
-    form->validateValues();
-    //robot->moveForward(form->platformF);
-    //robot->moveLeft(form->platformR);
-    robot->moveWaist(form->shoulder);
-    robot->turnElbowAndNeck(form->elbow);
-    robot->turnNeck(form->neck);
-    robot->turnWaist(form->waist);
-    robot->moveD(form->platformF);
-    robot->moveR(form->platformR);
+
+    validateValues();
+    robot->moveD(form.platformF);
+    robot->moveR(form.platformR);
+    robot->moveWaist(form.shoulder);
+    robot->turnElbowAndNeck(form.elbow);
+    robot->turnNeck(form.neck);
+    robot->turnWaist(form.waist);
 }
 
 
@@ -200,8 +195,8 @@ void MainWindow::setTelemetry(TelemetryPacket &packet){
         QTableWidgetItem *itemPosition = widget->item(i,1);
         int robotSpeed = packet.M_DATA[i].SPEED;
         int robotPosition = packet.M_DATA[i].POSITION;
-          itemSpeed->setText(QString::number(robotSpeed));
-          itemPosition->setText(QString::number(robotPosition));
+        itemSpeed->setText(QString::number(robotSpeed));
+        itemPosition->setText(QString::number(robotPosition));
         qDebug()<<robotSpeed<<"lll"<<robotPosition;
         ui->telemetryView->item(i,0)->setText(QString::number(packet.M_DATA[i].SPEED));
         ui->telemetryView->item(i,1)->setText(QString::number(packet.M_DATA[i].POSITION));
@@ -210,9 +205,26 @@ void MainWindow::setTelemetry(TelemetryPacket &packet){
     qDebug()<<"GEET";
 }
 void MainWindow::connectedToRobotUI(){
+    ui->connectButton->setText("Disconnect");
+    robot->isConnected = true;
     setEnabledAllControls(true);
+    dialog->hide();
     qDebug()<<"CONNECTED";
 }
 void MainWindow::setEnabledAllControls(bool v){
-    form->setEnabledForm(v);
+    ui->waistUpDown->setEnabled(v);
+    ui->elbowSlider->setEnabled(v);
+    ui->waistLeftRight->setEnabled(v);
+    ui->gripper->setEnabled(v);
+    ui->flipper->setEnabled(v);
+    ui->neckSlider->setEnabled(v);
+    ui->platformF->setEnabled(v);
+    ui->platformR->setEnabled(v);
+
+    ui->elbowLineEdit->setEnabled(v);
+    ui->neckLineEdit->setEnabled(v);
+    ui->shoulderLineEdit->setEnabled(v);
+    ui->waistLineEdit->setEnabled(v);
+    ui->platformForwardLineEdit->setEnabled(v);
+    ui->platformRLineEdit->setEnabled(v);
 }

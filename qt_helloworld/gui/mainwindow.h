@@ -7,13 +7,23 @@
 #include <QEvent>
 #include <vector>
 #include <QTableWidget>
+#include <QProgressDialog>
+struct JointForm{
+    int platformF;
+    int platformR;
+    int shoulder;
+    int elbow;
+    int neck;
+    int waist;
+
+};
 namespace Ui {
 class MainWindow;
 }
 
+
 class MainWindow : public QMainWindow
 {
-    class JointForm;
     Q_OBJECT
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
@@ -59,39 +69,20 @@ private slots:
     void connectedToRobotUI();
 
 private:
-
+    int validateValue(QString value);
+    JointForm form;
+    void validateValues();
+    QProgressDialog *dialog;
     Ui::MainWindow *ui;
     bool isLight;
     Robot *robot;
     RobotSettings *settings;
-    JointForm *form;
     int currentGripper = 0;
     int currentFlippers = 0;
     std::vector<std::vector<QTableWidgetItem> > telemetryViewItems;
     
     void setEnabledAllControls(bool);
-    
 
-
-    class JointForm{
-    public:
-            int neck = 0;
-            int elbow = 0;
-            int waist = 0;
-            int shoulder = 0;
-            int platformR = 0;
-            int platformF = 0;
-            MainWindow *window;
-
-        public:
-            void validateValues();
-            void setEnabledForm(bool v);
-
-            JointForm(MainWindow *window);
-            ~JointForm();
-        private:
-            int validateValue(QString value);
-        };
 };
 
 

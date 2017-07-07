@@ -41,6 +41,7 @@ signals:
     void telemetryChanged(TelemetryPacket &packet);
 
 public:
+    bool isConnected = false;
     RobotConfiguration *configuration;
     int getRealSpeed(int uiSpeed);
 };

@@ -25,6 +25,7 @@ private:
 
 
 public:
+    void disconnectFromRobot();
     UDPClient(RobotController *controller);
     //UDPClient();
     void putData(QDataStream &out, const RemoteControlPacket &packet);

@@ -119,3 +119,12 @@ void UDPClient::sendLivePackets(){
         RemoteControlPacket *packet = controller->packet;
         sendPacket(*packet);
 }
+
+void UDPClient::disconnectFromRobot(){
+    m_pudp->disconnectFromHost();
+    timer->stop();
+    disconnect(m_pudp,SIGNAL(readyRead()),this,SLOT(listenRobot()));
+    disconnect(m_pudp,SIGNAL(connected()),this,SLOT(startTimerTask()));
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(sendLivePackets()));
+
+}

@@ -125,3 +125,6 @@ void RobotController::stopGripper(){
 void RobotController::connectClient(){
     client->connectToRobot();
 }
+void RobotController::disconnectClient(){
+    client->disconnectFromRobot();
+}

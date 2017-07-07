@@ -46,6 +46,7 @@ public:
     void stopFlippers();
 
     void connectClient();
+    void disconnectClient();
 
 
 };

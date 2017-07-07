@@ -47,6 +47,7 @@ Robot::Robot():QObject()
     }
 
     int Robot::getRealSpeed(int speed){
+
         int realSpeed = 0;
         realSpeed = (speed-50)*200;
         qDebug()<<realSpeed;
