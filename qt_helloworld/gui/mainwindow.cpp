@@ -29,8 +29,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList *list  = new QStringList();
     RobotController *c = robot->controller;
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
-    *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"
-        <<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
+    *list
+            <<"grippersR"        //1
+            <<"shoulder"         //2
+            <<"neck"             //3
+            <<"elbow"            //4
+            <<"grippersF"        //5
+            <<"waist"            //6
+            <<"platformRight"    //7
+            <<"platformLeft"     //8
+            <<"flippers"         //9
+            <<"Light";           //10
     widget->setVerticalHeaderLabels(*list);
 
     }
@@ -100,26 +109,23 @@ void MainWindow::on_flipper_valueChanged(int value)
 void MainWindow::on_acceptForms_clicked()
 {
     validateValues();
-    if(form->platformF>0){
-        robot->moveD(form->platformF);
-        if(form->platformR>0)
-            robot->moveR(form->platformR);
+
+    if(form->elbow!=0){
+        robot->turnElbowAndNeck(form->elbow);
     }
     else{
-        if(form->platformR>0)
-            robot->moveR(form->platformR);
-        else{
-            robot->moveWaist(form->shoulder);
-            if (form->waist>0)
-               robot->turnWaist(form->waist);
-        }
+        robot->turnNeck(form->neck);
     }
 
+    if (form->platformF!=0||form->platformR!=0){
+        robot->moveD(form->platformF);
+        robot->moveR(form->platformR);
+    }
+    else{
+        robot->turnWaist(form->waist);
+        robot->moveWaist(form->shoulder);
+    }
 
-    if(form->elbow>0)
-        robot->turnElbowAndNeck(form->elbow);
-    else
-        robot->turnNeck(form->neck);
     }
 
 
@@ -154,7 +160,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event){
             if ( (key->key()==Qt::Key_Space)) {
                 qDebug()<<"STTTOOOOP";
                 on_stopAll_clicked();
-            } else {
+            }
+            else if(key->key()==Qt::Key_Return){
+                on_acceptForms_clicked();
+            }else {
                 return QObject::eventFilter(obj, event);
             }
             return true;

@@ -40,17 +40,29 @@ Robot::Robot():QObject()
         return configuration;
     }
     void Robot::turnElbowAndNeck(int speed){
+        if (speed==0)
+            controller->stopElbowNeck();
+        else
         controller->elbowNeck(-speed);
     }
     void Robot::turnNeck(int speed){
+        if (speed==0)
+            controller->stopNeck();
+        else
         controller->neck(-speed);
     }
 
 
     void Robot::turnWaist(int speed){
+        if (speed==0)
+            controller->stopWaist();
+        else
         controller->waist(speed);
     }
     void Robot::moveWaist(int speed){
+        if (speed==0)
+            controller->stopWaistUpDown();
+        else
         controller->waistUpDown(speed);
     }
 

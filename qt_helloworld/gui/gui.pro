@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     robotconfiguration.cpp \
     robotsettings.cpp \
     myqslider.cpp \
-    joint.cpp
+    joint.cpp \
+    packetsender.cpp \
+    packetreceiver.cpp
 
 HEADERS  += mainwindow.h \
     myudpclient.h\
@@ -30,7 +32,9 @@ HEADERS  += mainwindow.h \
     robotsettings.h \
     robotPackets.h \
     myqslider.h \
-    joint.h
+    joint.h \
+    packetsender.h \
+    packetreceiver.h
 
 FORMS    += mainwindow.ui \
     robotsettings.ui
