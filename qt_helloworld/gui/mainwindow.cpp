@@ -128,7 +128,10 @@ void MainWindow::on_acceptForms_clicked()
 void MainWindow::on_platformF_valueChanged(int value)
 {
     if (value%10==0)
-        robot->moveD(getRealSpeed(value));
+        if (value==50)
+            robot->controller->stopPlatformD();
+        else
+            robot->moveD(getRealSpeed(value));
 }
 
 void MainWindow::on_settings_clicked()
@@ -139,7 +142,10 @@ void MainWindow::on_settings_clicked()
 void MainWindow::on_platformR_valueChanged(int value)
 {
     if (value%10==0)
-        robot->moveR(getRealSpeed(value));
+        if (value==50)
+            robot->controller->stopPlatformR();
+        else
+            robot->moveR(getRealSpeed(value));
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event){
@@ -186,27 +192,39 @@ void MainWindow::setInputToZero(){
 void MainWindow::on_waistLeftRight_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnWaist(getRealSpeed( value));
+        if (value==50)
+            robot->controller->stopWaist();
+        else
+            robot->turnWaist(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_elbowSlider_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnElbowAndNeck(getRealSpeed( value));
+        if (value==50)
+            robot->controller->stopElbowNeck();
+        else
+            robot->turnElbowAndNeck(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_neckSlider_valueChanged(int value)
 {
     if (value%10==0){
-        robot->turnNeck(getRealSpeed( value));
+        if (value==50)
+            robot->controller->stopNeck();
+        else
+            robot->turnNeck(getRealSpeed( value));
     }
 }
 
 void MainWindow::on_waistUpDown_valueChanged(int value)
 {
     if(value%10==0){
+        if (value==50)
+            robot->controller->stopWaistUpDown();
+        else
         robot->moveWaist(getRealSpeed(value));
     }
 }
