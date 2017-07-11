@@ -7,6 +7,8 @@
 #include <QDataStream>
 #include <QHostAddress>
 #include "robotPackets.h"
+#include "packetreceiver.h"
+#include "packetsender.h"
 #define ROBOT_PORT 10000
 class RobotController;
 class UDPClient : public QObject{
@@ -16,12 +18,16 @@ class UDPClient : public QObject{
         void sendLivePackets();
         void listenRobot();
 private:
+
         bool isConntected = false;
     QUdpSocket *m_pudp;
     QHostAddress *robotAddress;
     void writeInputToFile(char *data);
     RobotController *controller;
     QTimer *timer;
+
+    PacketSender *sender;
+    PacketReceiver *receiver;
 
 
 public:
