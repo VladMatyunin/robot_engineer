@@ -18,19 +18,19 @@ SOURCES += main.cpp\
     robotcontroller.cpp \
     robot.cpp \
     robotconfiguration.cpp \
-    robotsettings.cpp \
     myqslider.cpp \
-    joint.cpp
+    joint.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     myudpclient.h\
     robotcontroller.h \
     robot.h \
     robotconfiguration.h \
-    robotsettings.h \
     robotPackets.h \
     myqslider.h \
-    joint.h
+    joint.h \
+    settingsdialog.h
 
 FORMS    += mainwindow.ui \
-    robotsettings.ui
+    settingsdialog.ui

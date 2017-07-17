@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "robot.h"
 #include "QDebug"
-#include "robotsettings.h"
 #include <QKeyEvent>
 #include <QStandardItem>
 #include <robotPackets.h>
@@ -16,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     form = new JointForm;
     robot = new Robot();
-    settings = new RobotSettings(robot->configuration, new QWidget);
+    settings = new SettingsDialog(this,robot->configuration);
     connect(robot,SIGNAL(telemetryChanged(TelemetryPacket&)),this,SLOT(setTelemetry(TelemetryPacket&)));
     qApp->installEventFilter(this);
     dialog = new QProgressDialog("Connecting to robot...", "Cancel", 0, 0);
@@ -29,8 +28,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList *list  = new QStringList();
     RobotController *c = robot->controller;
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
-    *list<<"neck"<<"elbow"<<"waist"<<"shoulder"<<"platformLeft"
-        <<"platformRight"<<"flippers"<<"grippersF"<<"grippersR"<<"Light";
+    *list<<"neck"
+        <<"elbow"
+        <<"waist"
+        <<"shoulder"
+        <<"platformLeft"
+        <<"platformRight"
+        <<"flippers"
+        <<"grippersF"
+        <<"grippersR"
+        <<"Light";
     widget->setVerticalHeaderLabels(*list);
 
     }
@@ -131,12 +138,14 @@ void MainWindow::on_platformF_valueChanged(int value)
         if (value==50)
             robot->controller->stopPlatformD();
         else
-            robot->moveD(getRealSpeed(value));
+            robot->moveD(getRealSpeed(value, robot->configuration->platformForwardSpeed));
 }
 
 void MainWindow::on_settings_clicked()
 {
     settings->show();
+
+
 }
 
 void MainWindow::on_platformR_valueChanged(int value)
@@ -145,7 +154,7 @@ void MainWindow::on_platformR_valueChanged(int value)
         if (value==50)
             robot->controller->stopPlatformR();
         else
-            robot->moveR(getRealSpeed(value));
+            robot->moveR(getRealSpeed(value, robot->configuration->platformRotateSpeed));
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event){
@@ -195,7 +204,7 @@ void MainWindow::on_waistLeftRight_valueChanged(int value)
         if (value==50)
             robot->controller->stopWaist();
         else
-            robot->turnWaist(getRealSpeed( value));
+            robot->turnWaist(getRealSpeed( value, robot->configuration->waistSpeed));
     }
 }
 
@@ -205,7 +214,7 @@ void MainWindow::on_elbowSlider_valueChanged(int value)
         if (value==50)
             robot->controller->stopElbowNeck();
         else
-            robot->turnElbowAndNeck(getRealSpeed( value));
+            robot->turnElbowAndNeck(getRealSpeed( value,robot->configuration->elbowSpeed));
     }
 }
 
@@ -215,7 +224,7 @@ void MainWindow::on_neckSlider_valueChanged(int value)
         if (value==50)
             robot->controller->stopNeck();
         else
-            robot->turnNeck(getRealSpeed( value));
+            robot->turnNeck(getRealSpeed( value, robot->configuration->neckSpeed));
     }
 }
 
@@ -225,7 +234,7 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
         if (value==50)
             robot->controller->stopWaistUpDown();
         else
-        robot->moveWaist(getRealSpeed(value));
+        robot->moveWaist(getRealSpeed(value,robot->configuration->shouldersSpeed));
     }
 }
 void MainWindow::setTelemetry(TelemetryPacket &packet){
@@ -269,9 +278,9 @@ void MainWindow::setEnabledAllControls(bool v){
 }
 
 
-int MainWindow::getRealSpeed(int speed){
+int MainWindow::getRealSpeed(int speed, int maxSpeed){
     int realSpeed = 0;
-    realSpeed = (speed-50)*200;
+    realSpeed = (speed-50)*(maxSpeed/50);
     qDebug()<<realSpeed;
     return realSpeed;
 }

@@ -3,11 +3,12 @@
 
 #include <QMainWindow>
 #include "robot.h"
-#include "robotsettings.h"
 #include <QEvent>
 #include <vector>
 #include <QTableWidget>
 #include <QProgressDialog>
+#include "settingsdialog.h"
+
 struct JointForm{
     int platformF;
     int platformR;
@@ -70,7 +71,7 @@ private slots:
 
 private:
     void setInputToZero();
-    int getRealSpeed(int speed);
+    int getRealSpeed(int speed, int maxSpeed);
     int validateValue(QString value);
     JointForm *form;
     void validateValues();
@@ -78,7 +79,7 @@ private:
     Ui::MainWindow *ui;
     bool isLight;
     Robot *robot;
-    RobotSettings *settings;
+    SettingsDialog *settings;
     int currentGripper = 0;
     int currentFlippers = 0;
     std::vector<std::vector<QTableWidgetItem> > telemetryViewItems;

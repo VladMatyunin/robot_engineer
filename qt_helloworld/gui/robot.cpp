@@ -6,7 +6,7 @@
 Robot::Robot():QObject()
 {
     controller = new RobotController(this);
-    configuration = new RobotConfiguration(5000,16000,false);
+    configuration = new RobotConfiguration(12000);
 }
 
     void Robot::moveD(int speed){
