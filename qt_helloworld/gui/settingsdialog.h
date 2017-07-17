@@ -8,6 +8,10 @@ namespace Ui {
 class SettingsDialog;
 }
 
+/*
+ * This UI is Dialog style
+ * Handles the robot speed configuration and others
+ */
 class SettingsDialog : public QDialog
 {
     Q_OBJECT
@@ -16,6 +20,7 @@ public:
     explicit SettingsDialog(QWidget *parent = 0, RobotConfiguration *c=NULL);
     ~SettingsDialog();
 
+    //UI Slots
 private slots:
     void on_platformForward_Slider_valueChanged(int value);
 
@@ -32,7 +37,11 @@ private slots:
     void on_buttonBox_accepted();
 
 private:
+    //configuration, which is got from Robot class
+    //after the settings are set and button "OK" is pressed
+    //settings are set to this pointer
     RobotConfiguration *conf;
+
     Ui::SettingsDialog *ui;
 };
 

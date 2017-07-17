@@ -1,6 +1,8 @@
 #ifndef ROBOTPACKETS_H
 #define ROBOTPACKETS_H
 
+//necessary pragma which removes ZERO bytes
+//See Servosila documentation for more details
 #pragma pack(push,1)
 struct RemoteControlPacket{
     u_int8_t FRAME_TYPE_ID=1;

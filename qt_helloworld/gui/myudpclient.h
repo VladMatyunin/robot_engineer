@@ -7,31 +7,62 @@
 #include <QDataStream>
 #include <QHostAddress>
 #include "robotPackets.h"
+
+//standart port to work with robot, see Servosila documentation for more details
 #define ROBOT_PORT 10000
+
+//forward decalration of RobotController class
 class RobotController;
+
 class UDPClient : public QObject{
     Q_OBJECT
-    public slots:
-        void startTimerTask();
-        void sendLivePackets();
-        void listenRobot();
+
+    //my slots
+public slots:
+    /*
+     * method starts timer to send packets to robot
+     * uses signal of QTimer, gets packet from RobotController
+     */
+    void startTimerTask();
+
+    /*
+         * sends packets each time called, needed to connect with startTimerTask();
+         */
+    void sendLivePackets();
+
+    /*
+         * slot connected to socket to be called, when telemetry(or other) packet received
+         * from robot. Emits ui slot (see MainWindow) to show them
+         */
+    void listenRobot();
+
+
 private:
-        bool isConntected = false;
+    //handles the connection state (Flag)
+    bool isConntected = false;
+    //socket to work with Robot, UDP
     QUdpSocket *m_pudp;
     QHostAddress *robotAddress;
     void writeInputToFile(char *data);
+
+    //controller needed to get packets
     RobotController *controller;
+
+    //needed to send live packets specific time
     QTimer *timer;
 
 
 public:
+    //called when Disconnect button called
     void disconnectFromRobot();
+
     UDPClient(RobotController *controller);
-    //UDPClient();
-    void putData(QDataStream &out, const RemoteControlPacket &packet);
-    void processData(bool);
+
+    //sends single packet, needed for Light
     void sendPacket(RemoteControlPacket packet);
     ~UDPClient();
+
+    //method that starts to connect to robot, entry method(!)
     void connectToRobot();
 
 

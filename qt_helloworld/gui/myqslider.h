@@ -3,6 +3,10 @@
 
 #include <QObject>
 #include <QSlider>
+
+/*
+ * class needed to handle specific behavior of sliders
+ */
 class MyQSlider : public QSlider
 {
     Q_OBJECT

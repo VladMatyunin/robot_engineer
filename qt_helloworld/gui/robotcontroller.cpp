@@ -11,8 +11,8 @@ RobotController::RobotController(Robot *r):QObject()
 {
     robot = r;
     client = new UDPClient(this);
-  //  QThread *clientThread = new QThread;
-//    client->moveToThread(clientThread);
+    clientThread = new QThread;
+    client->moveToThread(clientThread);
     packet = getBasicPacket();
 }
 

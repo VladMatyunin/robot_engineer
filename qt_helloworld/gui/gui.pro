@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     robot.cpp \
     robotconfiguration.cpp \
     myqslider.cpp \
-    joint.cpp \
     settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
@@ -29,7 +28,6 @@ HEADERS  += mainwindow.h \
     robotconfiguration.h \
     robotPackets.h \
     myqslider.h \
-    joint.h \
     settingsdialog.h
 
 FORMS    += mainwindow.ui \

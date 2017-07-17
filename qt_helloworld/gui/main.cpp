@@ -9,8 +9,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    //MyUdpServer server;
-    //server.show();
+
     MainWindow window(new QWidget);
     window.show();
 

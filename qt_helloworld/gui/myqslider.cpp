@@ -10,7 +10,7 @@ void MyQSlider::my_sliderMoved(){
     int position = value();
     if (position%10!=0){
         if (position%10>5)
-        setValue((position/10+1)*10);
+            setValue((position/10+1)*10);
         else setValue((position/10)*10);
 
     }

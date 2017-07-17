@@ -28,19 +28,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList *list  = new QStringList();
     RobotController *c = robot->controller;
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
-    *list<<"neck"
-        <<"elbow"
-        <<"waist"
-        <<"shoulder"
-        <<"platformLeft"
-        <<"platformRight"
-        <<"flippers"
-        <<"grippersF"
-        <<"grippersR"
-        <<"Light";
+    *list<<"grippersR"           //1
+        <<"shoulder"             //2
+       <<"neck"                 //3
+      <<"elbow"                //4
+     <<"grippersF"            //5
+    <<"waist"                //6
+    <<"platformRight"        //7
+    <<"platformLeft"         //8
+    <<"flippers"             //9
+    <<"Light";               //10
     widget->setVerticalHeaderLabels(*list);
 
-    }
+}
 
 
 
@@ -79,9 +79,9 @@ void MainWindow::on_lightToggle_clicked()
 void MainWindow::on_connectButton_clicked()
 {
     if (!robot->isConnected){
-    robot->connectToEngineer();
+        robot->connectToEngineer();
 
-    dialog->exec();
+        dialog->exec();
     }
     else{
         robot->isConnected=false;
@@ -118,7 +118,7 @@ void MainWindow::on_acceptForms_clicked()
         else{
             robot->moveWaist(form->shoulder);
             if (form->waist>0)
-               robot->turnWaist(form->waist);
+                robot->turnWaist(form->waist);
         }
     }
 
@@ -127,7 +127,7 @@ void MainWindow::on_acceptForms_clicked()
         robot->turnElbowAndNeck(form->elbow);
     else
         robot->turnNeck(form->neck);
-    }
+}
 
 
 
@@ -159,18 +159,18 @@ void MainWindow::on_platformR_valueChanged(int value)
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event){
     if (event->type()==QEvent::KeyPress) {
-            QKeyEvent* key = static_cast<QKeyEvent*>(event);
-            if ( (key->key()==Qt::Key_Space)) {
-                qDebug()<<"STTTOOOOP";
-                on_stopAll_clicked();
-            } else {
-                return QObject::eventFilter(obj, event);
-            }
-            return true;
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if ( (key->key()==Qt::Key_Space)) {
+            qDebug()<<"STTTOOOOP";
+            on_stopAll_clicked();
         } else {
             return QObject::eventFilter(obj, event);
         }
-        return false;
+        return true;
+    } else {
+        return QObject::eventFilter(obj, event);
+    }
+    return false;
 }
 
 void MainWindow::on_stopAll_clicked()
@@ -234,7 +234,7 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
         if (value==50)
             robot->controller->stopWaistUpDown();
         else
-        robot->moveWaist(getRealSpeed(value,robot->configuration->shouldersSpeed));
+            robot->moveWaist(getRealSpeed(value,robot->configuration->shouldersSpeed));
     }
 }
 void MainWindow::setTelemetry(TelemetryPacket &packet){

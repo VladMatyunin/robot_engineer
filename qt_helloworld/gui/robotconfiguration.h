@@ -1,6 +1,11 @@
 #ifndef ROBOTCONFIGURATION_H
 #define ROBOTCONFIGURATION_H
 
+
+/*
+ * This class is responsible for robot's configuration
+ * It configures its speed via settingsDialog class
+ */
 class RobotConfiguration
 {
 
@@ -9,6 +14,8 @@ public:
     ~RobotConfiguration();
     RobotConfiguration(int platformForwardSpeed=5000, int platformRotateSpeed = 5000, int shouldersSpeed=12000,
                        int neckSpeed=12000,int elbowSpeed=12000, int waistSpeed=12000, bool light = false);
+
+    //these values are the MAX_SPEED of each joint
     int platformForwardSpeed;
     int platformRotateSpeed;
     bool lightValue;
