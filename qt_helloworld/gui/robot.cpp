@@ -1,12 +1,14 @@
 #include "robot.h"
 #include <robotcontroller.h>
-#include <QDebug>
 #include <robotPackets.h>
 #include <QObject>
+#include "robotpositioncontroller.h"
 Robot::Robot():QObject()
 {
     controller = new RobotController(this);
     configuration = new RobotConfiguration(12000);
+    positionController = new RobotPositionController(this);
+    connect(this, SIGNAL(telemetryChanged(char*)),positionController, SLOT(handleTelemetry(char*)));
 }
 
 void Robot::moveD(int speed){
@@ -85,4 +87,7 @@ void Robot::connectToEngineer(){
     controller->connectClient();
 }
 
+void Robot::handleTelemetry(char *data){
+
+}
 

@@ -44,7 +44,6 @@ void UDPClient::listenRobot(){
         in.readRawData(buffer,275);
 
         if(buffer[0]==2){
-            qDebug()<<"CLIENT THREAD"<<QThread::currentThreadId();
             emit controller->robot->telemetryChanged(buffer);
             return;
         }else{
@@ -103,7 +102,6 @@ void UDPClient::startTimerTask(){
 
 void UDPClient::sendLivePackets(){
     RemoteControlPacket *packet = controller->packet;
-    qDebug()<<packet->AXIS[1];
     sendPacket(*packet);
 }
 

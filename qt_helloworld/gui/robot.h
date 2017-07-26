@@ -6,6 +6,7 @@
 //forward declaration of RobotController class
 class RobotController;
 
+class RobotPositionController;
 //forward declaration of TelemetryPacket class
 struct TelemetryPacket;
 
@@ -118,13 +119,14 @@ signals:
      * The slot from MainWindow handles it and shows the info
      */
     void telemetryChanged(char *data);
-//private slots:
-//    void handleTelemetry(char *data);
+private slots:
+    void handleTelemetry(char *data);
 
 public:
     //Flag to handle connection
     bool isConnected = false;
     RobotConfiguration *configuration;
+    RobotPositionController *positionController;
 };
 
 #endif // ROBOT_H

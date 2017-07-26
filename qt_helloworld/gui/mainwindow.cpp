@@ -1,13 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "robot.h"
-#include "QDebug"
 #include <QKeyEvent>
 #include <QStandardItem>
 #include <robotPackets.h>
 #include <robotcontroller.h>
 #include <QProgressDialog>
 #include <QThread>
+#include <QString>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
         widget->setItem(i,0,new QTableWidgetItem());
         widget->setItem(i,1,new QTableWidgetItem());
     }
+    posController = robot->positionController;
     QStringList *list  = new QStringList();
     RobotController *c = robot->controller;
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
@@ -162,7 +163,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event){
     if (event->type()==QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
         if ( (key->key()==Qt::Key_Space)) {
-            qDebug()<<"STTTOOOOP";
             on_stopAll_clicked();
         } else {
             return QObject::eventFilter(obj, event);
@@ -239,7 +239,6 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
     }
 }
 void MainWindow::setTelemetry(char *data){
-    qDebug()<<"MAIN WINDOW"<<QThread::currentThreadId();
     TelemetryPacket *packet = (TelemetryPacket*)data;
     QTableWidget *widget = ui->telemetryView;
     for(int i = 0; i < 10; ++i){
@@ -252,14 +251,13 @@ void MainWindow::setTelemetry(char *data){
         ui->telemetryView->item(i,0)->setText(QString::number(packet->M_DATA[i].SPEED));
         ui->telemetryView->item(i,1)->setText(QString::number(packet->M_DATA[i].POSITION));
     }
-    delete packet;
+    //delete packet;
 }
 void MainWindow::connectedToRobotUI(){
     ui->connectButton->setText("Disconnect");
     robot->isConnected = true;
     setEnabledAllControls(true);
     dialog->hide();
-    qDebug()<<"CONNECTED";
 }
 void MainWindow::setEnabledAllControls(bool v){
     ui->waistUpDown->setEnabled(v);
@@ -283,6 +281,10 @@ void MainWindow::setEnabledAllControls(bool v){
 int MainWindow::getRealSpeed(int speed, int maxSpeed){
     int realSpeed = 0;
     realSpeed = (speed-50)*(maxSpeed/50);
-    qDebug()<<realSpeed;
     return realSpeed;
+}
+
+void MainWindow::on_acceptButton_clicked()
+{
+    posController->rotateWaist(ui->waistAngle->text().toInt());
 }

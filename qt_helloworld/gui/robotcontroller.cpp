@@ -5,7 +5,6 @@
 #include <QString>
 #include "myudpclient.h"
 #include "robotPackets.h"
-#include "QDebug"
 #include "robot.h"
 RobotController::RobotController(Robot *r):QObject()
 {
@@ -43,9 +42,7 @@ RemoteControlPacket* RobotController::getBasicPacket(){
  * sets the AXIS[1] speed to @speed, this moves platform
  */
 void RobotController::movePlatformDirect(int speed){
-    qDebug()<<"SETVALUE"<<speed;
     packet->AXIS[1] = speed;
-    qDebug()<<"SETTEDVALUE"<<packet->AXIS[1];
 }
 
 

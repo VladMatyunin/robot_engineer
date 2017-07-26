@@ -8,7 +8,7 @@
 #include <QTableWidget>
 #include <QProgressDialog>
 #include "settingsdialog.h"
-
+#include "robotpositioncontroller.h"
 /*
  * structure needed to work with input windows
  */
@@ -76,6 +76,8 @@ private slots:
 
     void on_waistUpDown_valueChanged(int value);
 
+    void on_acceptButton_clicked();
+
 public slots:
     //slot to control telemetry from client(robot) and show it
     void setTelemetry(char *data);
@@ -106,7 +108,7 @@ private:
 
     //main class to work with robot, see description in headers
     Robot *robot;
-
+    RobotPositionController *posController;
     //settings dialog to configure robot speed
     SettingsDialog *settings;
 
