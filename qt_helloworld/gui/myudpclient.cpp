@@ -31,6 +31,7 @@ void UDPClient::listenRobot(){
     }
     QByteArray baDatagram;
     do {
+
         baDatagram.resize(m_pudp->pendingDatagramSize());
         m_pudp->readDatagram(baDatagram.data(),baDatagram.size());
 
@@ -38,14 +39,13 @@ void UDPClient::listenRobot(){
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
 
     do {
+
         char* buffer = new char[275];
         in.readRawData(buffer,275);
 
         if(buffer[0]==2){
-            TelemetryPacket *telPacket = new TelemetryPacket();
-            telPacket = (TelemetryPacket*)(buffer);
-            emit controller->robot->telemetryChanged(*telPacket);
-
+            qDebug()<<"CLIENT THREAD"<<QThread::currentThreadId();
+            emit controller->robot->telemetryChanged(buffer);
             return;
         }else{
             delete[] buffer;

@@ -7,6 +7,7 @@
 #include <robotPackets.h>
 #include <robotcontroller.h>
 #include <QProgressDialog>
+#include <QThread>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     form = new JointForm;
     robot = new Robot();
     settings = new SettingsDialog(this,robot->configuration);
-    connect(robot,SIGNAL(telemetryChanged(TelemetryPacket&)),this,SLOT(setTelemetry(TelemetryPacket&)));
+    connect(robot,SIGNAL(telemetryChanged(char*)),this,SLOT(setTelemetry(char*)));
     qApp->installEventFilter(this);
     dialog = new QProgressDialog("Connecting to robot...", "Cancel", 0, 0);
     dialog->setWindowModality(Qt::WindowModal);
@@ -237,20 +238,21 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
             robot->moveWaist(getRealSpeed(value,robot->configuration->shouldersSpeed));
     }
 }
-void MainWindow::setTelemetry(TelemetryPacket &packet){
-
+void MainWindow::setTelemetry(char *data){
+    qDebug()<<"MAIN WINDOW"<<QThread::currentThreadId();
+    TelemetryPacket *packet = (TelemetryPacket*)data;
     QTableWidget *widget = ui->telemetryView;
     for(int i = 0; i < 10; ++i){
         QTableWidgetItem *itemSpeed = widget->item(i,0);
         QTableWidgetItem *itemPosition = widget->item(i,1);
-        int robotSpeed = packet.M_DATA[i].SPEED;
-        int robotPosition = packet.M_DATA[i].POSITION;
+        int robotSpeed = packet->M_DATA[i].SPEED;
+        int robotPosition = packet->M_DATA[i].POSITION;
         itemSpeed->setText(QString::number(robotSpeed));
         itemPosition->setText(QString::number(robotPosition));
-        ui->telemetryView->item(i,0)->setText(QString::number(packet.M_DATA[i].SPEED));
-        ui->telemetryView->item(i,1)->setText(QString::number(packet.M_DATA[i].POSITION));
+        ui->telemetryView->item(i,0)->setText(QString::number(packet->M_DATA[i].SPEED));
+        ui->telemetryView->item(i,1)->setText(QString::number(packet->M_DATA[i].POSITION));
     }
-    delete &packet;
+    delete packet;
 }
 void MainWindow::connectedToRobotUI(){
     ui->connectButton->setText("Disconnect");

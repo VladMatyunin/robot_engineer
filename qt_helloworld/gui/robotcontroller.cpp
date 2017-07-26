@@ -12,8 +12,12 @@ RobotController::RobotController(Robot *r):QObject()
     robot = r;
     client = new UDPClient(this);
     clientThread = new QThread;
-    client->moveToThread(clientThread);
+
     packet = getBasicPacket();
+
+    client->moveToThread(clientThread);
+    connect(clientThread,SIGNAL(started()), client,SLOT(connectToRobot()));
+//    connect(clientThread,SIGNAL())
 }
 
 RobotController::~RobotController(){
@@ -125,7 +129,7 @@ void RobotController::stopGripper(){
 }
 
 void RobotController::connectClient(){
-    client->connectToRobot();
+    clientThread->start();
 }
 void RobotController::disconnectClient(){
     client->disconnectFromRobot();

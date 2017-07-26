@@ -35,6 +35,9 @@ public slots:
          * from robot. Emits ui slot (see MainWindow) to show them
          */
     void listenRobot();
+    void connectToRobot();
+    void disconnectFromRobot();
+
 
 
 private:
@@ -54,7 +57,7 @@ private:
 
 public:
     //called when Disconnect button called
-    void disconnectFromRobot();
+
 
     UDPClient(RobotController *controller);
 
@@ -63,7 +66,6 @@ public:
     ~UDPClient();
 
     //method that starts to connect to robot, entry method(!)
-    void connectToRobot();
 
 
 };

@@ -78,7 +78,7 @@ private slots:
 
 public slots:
     //slot to control telemetry from client(robot) and show it
-    void setTelemetry(TelemetryPacket &packet);
+    void setTelemetry(char *data);
     //slot called when client connected to show button(disconnected)
     void connectedToRobotUI();
 

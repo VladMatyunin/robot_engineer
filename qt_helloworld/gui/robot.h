@@ -117,7 +117,9 @@ signals:
      * this signal is emited when UdpClient gets new packet from robot.
      * The slot from MainWindow handles it and shows the info
      */
-    void telemetryChanged(TelemetryPacket &packet);
+    void telemetryChanged(char *data);
+//private slots:
+//    void handleTelemetry(char *data);
 
 public:
     //Flag to handle connection
