@@ -14,7 +14,7 @@ RobotPositionController::RobotPositionController(Robot *r):QObject()
     robot = r;
     timer = new QTimer();
     positionInfo = new TelemetryPacket;
-    connect(timer, SIGNAL(timeout()), this, SLOT(rotateWaist()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(rotateElbow()));
 }
 
 RobotPositionController::~RobotPositionController(){
@@ -38,13 +38,26 @@ void RobotPositionController::rotateWaist(){
       robot->stopAll();
     }
 }
+
+void RobotPositionController::rotateElbow(){
+    int delta = executePositionValue(angle);
+    if(deltaApproximateEquality(this->startTelemetry, positionInfo->M_DATA[2].POSITION, delta)) {
+      timer->stop();
+      robot->stopAll();
+    }
+}
+
 void RobotPositionController:: startTimerTask(int angle){
-    this->startTelemetry = positionInfo->M_DATA[5].POSITION;
+    //this->startTelemetry = positionInfo->M_DATA[5].POSITION;
+    this->startTelemetry = positionInfo->M_DATA[2].POSITION;
     this->angle = angle;
     timer->start(100);
-    if ( angle > 0 )
-        robot->turnWaist(10000);
-    else robot->turnWaist(-10000);
+//    if ( angle > 0 )
+//        robot->turnWaist(10000);
+//    else robot->turnWaist(-10000);
+        if ( angle > 0 )
+            robot->turnElbowAndNeck(10000);
+        else robot->turnElbowAndNeck(-10000);
 }
 
 int RobotPositionController::executePositionValue(int angle){

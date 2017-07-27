@@ -33,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
     *list<<"grippersR"           //1
         <<"shoulder"             //2
-       <<"neck"                 //3
-      <<"elbow"                //4
+       <<      "elbow"           //3
+      << "neck"               //4
      <<"grippersF"            //5
     <<"waist"                //6
     <<"platformRight"        //7
@@ -288,5 +288,5 @@ int MainWindow::getRealSpeed(int speed, int maxSpeed){
 
 void MainWindow::on_acceptButton_clicked()
 {
-    posController->startTimerTask(ui->waistAngle->text().toInt());
+    posController->startTimerTask(ui->elbowAngle->text().toInt());
 }

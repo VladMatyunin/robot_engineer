@@ -23,6 +23,7 @@ public:
 public slots:
     void handleTelemetry(char *data);
     void rotateWaist();
+    void rotateElbow();
 private:
     int angle;
     int startTelemetry;
