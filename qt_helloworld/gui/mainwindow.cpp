@@ -8,6 +8,7 @@
 #include <QProgressDialog>
 #include <QThread>
 #include <QString>
+#include <QDebug>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -239,6 +240,7 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
     }
 }
 void MainWindow::setTelemetry(char *data){
+    //qDebug(data);
     TelemetryPacket *packet = (TelemetryPacket*)data;
     QTableWidget *widget = ui->telemetryView;
     for(int i = 0; i < 10; ++i){
@@ -286,5 +288,5 @@ int MainWindow::getRealSpeed(int speed, int maxSpeed){
 
 void MainWindow::on_acceptButton_clicked()
 {
-    posController->rotateWaist(ui->waistAngle->text().toInt());
+    posController->startTimerTask(ui->waistAngle->text().toInt());
 }

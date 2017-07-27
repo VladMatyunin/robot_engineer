@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "robotPackets.h"
 #include "robot.h"
-
+#define ANGLE_DELTA 182
 class RobotPositionController : public QObject
 {
     Q_OBJECT
@@ -16,13 +16,18 @@ public: Robot *robot;
 
 public:
     TelemetryPacket *positionInfo;
-    void rotateWaist(int angle);
 
+    void startTimerTask(int angle);
     RobotPositionController(Robot *robot);
     ~RobotPositionController();
 public slots:
     void handleTelemetry(char *data);
-
+    void rotateWaist();
+private:
+    int angle;
+    int startTelemetry;
+    QTimer *timer;
+    bool deltaApproximateEquality(int first_telemtry, int current_telemetry, int angle_delta);
 
 };
 

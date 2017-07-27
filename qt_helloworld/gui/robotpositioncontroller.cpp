@@ -7,10 +7,14 @@
 #include "robotPackets.h"
 #include "QDebug"
 #include "robot.h"
+#include <cstdlib>
+
 RobotPositionController::RobotPositionController(Robot *r):QObject()
 {
     robot = r;
-
+    timer = new QTimer();
+    positionInfo = new TelemetryPacket;
+    connect(timer, SIGNAL(timeout()), this, SLOT(rotateWaist()));
 }
 
 RobotPositionController::~RobotPositionController(){
@@ -18,19 +22,43 @@ RobotPositionController::~RobotPositionController(){
 }
 
 void RobotPositionController::handleTelemetry(char *data){
+
+    delete positionInfo;
     positionInfo = (TelemetryPacket*) data;
-    delete data;
+
 }
 
 
-void RobotPositionController::rotateWaist(int angle){
-    int c = executePositionValue(angle);
-//    while (positionInfo->M_DATA[5].POSITION<executePositionValue(angle)) {
-//        robot->turnWaist(robot->configuration->waistSpeed);
-//    }
-//    robot->stopAll();
+void RobotPositionController::rotateWaist(){
+    qDebug("ENTERED");
+
+    int delta = executePositionValue(angle);
+    if(deltaApproximateEquality(this->startTelemetry, positionInfo->M_DATA[5].POSITION, delta)) {
+      timer->stop();
+      robot->stopAll();
+    }
+}
+void RobotPositionController:: startTimerTask(int angle){
+    this->startTelemetry = positionInfo->M_DATA[5].POSITION;
+    this->angle = angle;
+    timer->start(100);
+    if ( angle > 0 )
+        robot->turnWaist(10000);
+    else robot->turnWaist(-10000);
 }
 
 int RobotPositionController::executePositionValue(int angle){
-    return ((60000*angle)/360);
+    return ((65535*angle)/360);
+}
+
+bool RobotPositionController::deltaApproximateEquality(int first_telemtry, int current_telemetry, int angle_delta){
+    if (angle_delta>0){
+    if((std::abs(current_telemetry-first_telemtry)+ANGLE_DELTA) > angle_delta) return true;
+        return false;
+    }else
+    {
+        if((-std::abs(current_telemetry-first_telemtry)-ANGLE_DELTA) < angle_delta) return true;
+            return false;
+
+    }
 }
