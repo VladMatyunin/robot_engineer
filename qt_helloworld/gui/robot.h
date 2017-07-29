@@ -119,8 +119,7 @@ signals:
      * The slot from MainWindow handles it and shows the info
      */
     void telemetryChanged(char *data);
-private slots:
-    void handleTelemetry(char *data);
+
 
 public:
     //Flag to handle connection

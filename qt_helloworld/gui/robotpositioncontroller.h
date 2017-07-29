@@ -5,7 +5,14 @@
 #include <QTimer>
 #include "robotPackets.h"
 #include "robot.h"
+
+//1 degree of angle in Servosila's joints
 #define ANGLE_DELTA 182
+
+/**
+ * @brief The RobotPositionController class
+ * This class is used for robot manipulating using position values, like degrees of joints
+ */
 class RobotPositionController : public QObject
 {
     Q_OBJECT
@@ -15,6 +22,7 @@ public: Robot *robot;
 
 
 public:
+    //info about current joints position
     TelemetryPacket *positionInfo;
 
     void startTimerTask(int angle);

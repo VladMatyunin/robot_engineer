@@ -21,6 +21,8 @@ public:
     ~SettingsDialog();
 
     //UI Slots
+    //Called when user moved sliders
+    //got value from 5000 to 32000, the speed of each joint
 private slots:
     void on_platformForward_Slider_valueChanged(int value);
 
