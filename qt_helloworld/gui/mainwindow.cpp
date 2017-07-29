@@ -10,27 +10,56 @@
 #include <QString>
 #include <QDebug>
 using namespace std;
+
+/**
+ * @brief MainWindow::MainWindow
+ * @param parent
+ * This is main window UI, shown after program is started
+ */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //init form, used to control robot via windows
     form = new JointForm;
+
+    //The object, using which the manipulations are made
     robot = new Robot();
+
+    //settings, like speed, see settingsdialog.h for details
     settings = new SettingsDialog(this,robot->configuration);
+
+    //connect robot's signal when position is changed
+    //see updClient, where this signal is emitted
     connect(robot,SIGNAL(telemetryChanged(char*)),this,SLOT(setTelemetry(char*)));
+
+    //needed to control hot keys
     qApp->installEventFilter(this);
+
+    //dialog shown while connecting to robot
     dialog = new QProgressDialog("Connecting to robot...", "Cancel", 0, 0);
     dialog->setWindowModality(Qt::WindowModal);
+
+    //telemetry values init
     QTableWidget *widget = ui->telemetryView;
     for(int i = 0; i < 10; ++i){
         widget->setItem(i,0,new QTableWidgetItem());
         widget->setItem(i,1,new QTableWidgetItem());
     }
+
+    //object to control robot via position and angles
     posController = robot->positionController;
-    QStringList *list  = new QStringList();
+
+    //object to control robot via speed values
     RobotController *c = robot->controller;
+
+    //called when first telemetry packets got, so hide dialog and change button
+    //text from "Connect" to "Disconnect"
     connect(robot->controller,SIGNAL(connectedToRobot()),this,SLOT(connectedToRobotUI()));
+
+    //init the values of telemtry view
+    QStringList *list  = new QStringList();
     *list<<"grippersR"           //1
         <<"shoulder"             //2
        <<      "elbow"           //3
@@ -46,7 +75,11 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-
+/**
+ * @brief MainWindow::validateValues
+ * method called when user pressed "Accept" button to
+ * control robot via windows
+ */
 void MainWindow::validateValues(){
     form->elbow = validateValue(ui->elbowLineEdit->text());
     form->neck = validateValue(ui->neckLineEdit->text());
@@ -56,6 +89,12 @@ void MainWindow::validateValues(){
     form->platformR = validateValue(ui->platformRLineEdit->text());
 
 }
+
+/**
+ * @brief MainWindow::validateValue
+ * @param value - value from input window
+ * @return int value, which is speed
+ */
 int MainWindow::validateValue(QString value){
     if(value.isNull()|| value.isEmpty())
         return 0;
@@ -65,7 +104,7 @@ int MainWindow::validateValue(QString value){
 
 
 
-
+//Destructor
 MainWindow::~MainWindow()
 {
     delete dialog, form;
@@ -73,17 +112,25 @@ MainWindow::~MainWindow()
     delete robot, settings;
 }
 
+//slot called to handle Light checkbox
+//calls robot to turn light
 void MainWindow::on_lightToggle_clicked()
 {
     isLight = !isLight;
     robot->turnLight();
 }
 
+/**
+ * @brief MainWindow::on_connectButton_clicked
+ * Slot called to handle connect button click
+ * starts connecting or disconnecting
+ */
 void MainWindow::on_connectButton_clicked()
 {
     if (!robot->isConnected){
         robot->connectToEngineer();
-
+        //show dialog
+        //it is hidden after udpclient emits signal
         dialog->exec();
     }
     else{
@@ -94,19 +141,31 @@ void MainWindow::on_connectButton_clicked()
     }
 }
 
-
-
+/**
+ * @brief MainWindow::on_gripper_valueChanged
+ * @param value is dial's value:
+ *  -1, which is down
+ *   0, which is stop
+ *   1, which is up
+ */
 void MainWindow::on_gripper_valueChanged(int value)
 {
     robot->gripper(value);
 }
 
+/**
+ * @brief MainWindow::on_flipper_valueChanged
+ * @param value the same as gripper's slot
+ */
 void MainWindow::on_flipper_valueChanged(int value)
 {
 
     robot->flippers(value);
 }
 
+//handles window inputs
+//the main problem is AXIS and INPUT collision
+//see servosila documents
 void MainWindow::on_acceptForms_clicked()
 {
     validateValues();
@@ -134,7 +193,11 @@ void MainWindow::on_acceptForms_clicked()
 
 
 
-
+/**
+ * @brief MainWindow::on_platformF_valueChanged
+ * @param value - platform slider's value (from 0 to 100)
+ * it is vertical
+ */
 void MainWindow::on_platformF_valueChanged(int value)
 {
     if (value%10==0)
@@ -144,13 +207,22 @@ void MainWindow::on_platformF_valueChanged(int value)
             robot->moveD(getRealSpeed(value, robot->configuration->platformForwardSpeed));
 }
 
+
+//settings button slot
 void MainWindow::on_settings_clicked()
 {
+    //show dialog, see settingsdialog.h
     settings->show();
 
 
 }
 
+/**
+ * @brief MainWindow::on_platformR_valueChanged
+ * @param value - platformR slider's value (from 0 to 100)
+ * 0-left, 100-right
+ * calls robot's moveR method
+ */
 void MainWindow::on_platformR_valueChanged(int value)
 {
     if (value%10==0)
@@ -160,9 +232,11 @@ void MainWindow::on_platformR_valueChanged(int value)
             robot->moveR(getRealSpeed(value, robot->configuration->platformRotateSpeed));
 }
 
+//handles hot keys
 bool MainWindow::eventFilter(QObject *obj, QEvent *event){
     if (event->type()==QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        //PANIC button handler
         if ( (key->key()==Qt::Key_Space)) {
             on_stopAll_clicked();
         } else {
@@ -175,12 +249,19 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event){
     return false;
 }
 
+//calls robot to stop
+//sets UI elements to start
 void MainWindow::on_stopAll_clicked()
 {
     robot->stopAll();
     setSlidersToStart();
     setInputToZero();
 }
+
+/**
+ * @brief MainWindow::setSlidersToStart
+ * sets all sliders positions to start values
+ */
 void MainWindow::setSlidersToStart(){
     ui->waistUpDown->setValue(50);
     ui->waistLeftRight->setValue(50);
@@ -191,6 +272,8 @@ void MainWindow::setSlidersToStart(){
     ui->platformF->setValue(50);
     ui->platformR->setValue(50);
 }
+
+//sets input values to zero
 void MainWindow::setInputToZero(){
     ui->elbowLineEdit->setText("0");
     ui->neckLineEdit->setText("0");
@@ -200,6 +283,14 @@ void MainWindow::setInputToZero(){
     ui->platformRLineEdit->setText("0");
 }
 
+/**
+ *  THE NEXT SECTION HAS SIMILAR CODE
+ *  THE DESCRIPTION IS ALSO SIMILAR
+ *  these methods are slots, they handle user's slider moves
+ *  is it is placed to zero, then movement is made
+ *  START SECTION
+ *  ======================================================================================
+ */
 void MainWindow::on_waistLeftRight_valueChanged(int value)
 {
     if (value%10==0){
@@ -210,6 +301,7 @@ void MainWindow::on_waistLeftRight_valueChanged(int value)
     }
 }
 
+//elbow and neck joints move
 void MainWindow::on_elbowSlider_valueChanged(int value)
 {
     if (value%10==0){
@@ -230,6 +322,7 @@ void MainWindow::on_neckSlider_valueChanged(int value)
     }
 }
 
+//also known as shoulder
 void MainWindow::on_waistUpDown_valueChanged(int value)
 {
     if(value%10==0){
@@ -239,6 +332,23 @@ void MainWindow::on_waistUpDown_valueChanged(int value)
             robot->moveWaist(getRealSpeed(value,robot->configuration->shouldersSpeed));
     }
 }
+/**
+ * END SECTION
+ * ====================================================================================
+ */
+
+
+/**
+ * @brief MainWindow::setTelemetry
+ * this method is slot, called when UDPCLient got telemetry from robot
+ * it converts data char* to Telemetry Packet
+ *
+ * @param data - char*, but is converted to TelemtryPacket
+ * see robotPackets.h for its structure
+ *
+ * NOTE: it does not delete data pointer, because it is also used in
+ * RobotPositionController class
+ */
 void MainWindow::setTelemetry(char *data){
     //qDebug(data);
     TelemetryPacket *packet = (TelemetryPacket*)data;
@@ -255,13 +365,22 @@ void MainWindow::setTelemetry(char *data){
     }
     //delete packet;
 }
+
+/**
+ * @brief MainWindow::connectedToRobotUI
+ * slot to handle robot connection event
+ */
 void MainWindow::connectedToRobotUI(){
     ui->connectButton->setText("Disconnect");
     robot->isConnected = true;
     setEnabledAllControls(true);
     dialog->hide();
 }
+
+//called when robot connected with true value and with false when disconnected
 void MainWindow::setEnabledAllControls(bool v){
+
+    //disable sliders
     ui->waistUpDown->setEnabled(v);
     ui->elbowSlider->setEnabled(v);
     ui->waistLeftRight->setEnabled(v);
@@ -271,6 +390,7 @@ void MainWindow::setEnabledAllControls(bool v){
     ui->platformF->setEnabled(v);
     ui->platformR->setEnabled(v);
 
+    //disable windows
     ui->elbowLineEdit->setEnabled(v);
     ui->neckLineEdit->setEnabled(v);
     ui->shoulderLineEdit->setEnabled(v);
@@ -279,7 +399,15 @@ void MainWindow::setEnabledAllControls(bool v){
     ui->platformRLineEdit->setEnabled(v);
 }
 
-
+/**
+ * @brief MainWindow::getRealSpeed
+ * Converts values from UI(sliders) to robot values
+ * see Servosila Documentation
+ *
+ * @param speed - the value from slider (from 0 to 100)
+ * @param maxSpeed - the speed from RobotConfiguration object
+ * @return the robot kind speed (max range is from -32000 to 32000)
+ */
 int MainWindow::getRealSpeed(int speed, int maxSpeed){
     int realSpeed = 0;
     realSpeed = (speed-50)*(maxSpeed/50);

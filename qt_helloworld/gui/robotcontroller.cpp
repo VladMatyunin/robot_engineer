@@ -6,28 +6,47 @@
 #include "myudpclient.h"
 #include "robotPackets.h"
 #include "robot.h"
+
+/**
+ * @brief RobotController::RobotController
+ * This class controls robot's movement, based on speed values
+ *
+ * @param r - the pointer to Robot class object
+ */
 RobotController::RobotController(Robot *r):QObject()
 {
-    robot = r;
-    client = new UDPClient(this);
-    clientThread = new QThread;
+    //robot = r;
 
+    //client to handle
+    client = new UDPClient(this);
+    //its thread
+    clientThread = new QThread;
+    //build packet, which is static
+    //client will use it to send, and all other methods change it
     packet = getBasicPacket();
 
+    //move client to another thread
     client->moveToThread(clientThread);
+
+    //connect it to make it parallel
     connect(clientThread,SIGNAL(started()), client,SLOT(connectToRobot()));
-//    connect(clientThread,SIGNAL())
 }
 
 RobotController::~RobotController(){
     delete packet;
 }
 
+/**
+ * @brief RobotController::turnLight
+ * turns light, main problem is that there is no info about the light
+ */
 void RobotController::turnLight(){
     RemoteControlPacket *packet = getBasicPacket();
     packet->BUTTON[1] = 1;
     client->sendPacket(*packet);
 }
+
+//returns packet with zero values
 RemoteControlPacket* RobotController::getBasicPacket(){
 
     RemoteControlPacket *packet = new RemoteControlPacket();
@@ -37,7 +56,12 @@ RemoteControlPacket* RobotController::getBasicPacket(){
     return packet;
 }
 
-
+/**
+  * METHODS BELOW IMPLEMENT SERVOSILA'S DOCUMENTATION
+  * SEE IT FOR MORE DETAILS
+  * START SECTION
+  * ==============================================================================
+  */
 /*
  * sets the AXIS[1] speed to @speed, this moves platform
  */
@@ -125,9 +149,18 @@ void RobotController::stopGripper(){
     packet->BUTTON[3] = 0;
 }
 
+/**
+ * END SECTION
+ * =============================================================================
+ */
+
+//start only clientThread, which will call
+//client's method via Signal-Slot connection
 void RobotController::connectClient(){
     clientThread->start();
 }
+
+//disconnect
 void RobotController::disconnectClient(){
     client->disconnectFromRobot();
 }
